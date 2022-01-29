@@ -1,6 +1,5 @@
 package ss.Scrabble;
 
-import ss.week4.tictactoe.Mark;
 
 import java.util.Arrays;
 
@@ -99,6 +98,78 @@ public class Board {
         } else {
             return null;
         }
+    }
+
+    public void setPremiumField(int row, int col, Cell.CellValue cellValue){
+        this.cells[row][col] = new Cell(cellValue);
+    }
+
+    public void setDefaultPremiumFields(){
+//        Triple word value
+        setPremiumField(1,1, Cell.CellValue.TRIPLE_WORD);
+        setPremiumField(1,8, Cell.CellValue.TRIPLE_WORD);
+        setPremiumField(1,15, Cell.CellValue.TRIPLE_WORD);
+        setPremiumField(8,1, Cell.CellValue.TRIPLE_WORD);
+        setPremiumField(8,15, Cell.CellValue.TRIPLE_WORD);
+        setPremiumField(15,1, Cell.CellValue.TRIPLE_WORD);
+        setPremiumField(15,8, Cell.CellValue.TRIPLE_WORD);
+        setPremiumField(15,15, Cell.CellValue.TRIPLE_WORD);
+//        Double word value
+        setPremiumField(2,2, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(2,14, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(3,3, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(3,13, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(4, 4, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(4,12, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(5,5, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(5,11, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(11,5, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(11,11, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(12,4, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(12,12, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(13,3, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(13,13, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(14,2, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(14,14, Cell.CellValue.DOUBLE_WORD);
+        setPremiumField(8,8, Cell.CellValue.DOUBLE_WORD);
+//        Double letter value
+        setPremiumField(1,4, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(1,12, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(3,7, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(3,9, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(4,1, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(4,8, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(4,15, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(7,3, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(7,7, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(7,9, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(7,13, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(8,4, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(8,12, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(9,3, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(9,7, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(9,9, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(9,13, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(12,1, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(12,8, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(12,15, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(13,7, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(13,9, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(15,4, Cell.CellValue.DOUBLE_LETTER);
+        setPremiumField(15,12, Cell.CellValue.DOUBLE_LETTER);
+//      Tripple letter value
+        setPremiumField(2,6, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField(2,10, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField(6,2, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField(6,6, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField(6,10, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField(6,14, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField(10,2, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField( 10,6, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField(10,10, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField(10,14, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField(14,6, Cell.CellValue.TRIPLE_LETTER);
+        setPremiumField(14,10, Cell.CellValue.TRIPLE_LETTER);
     }
 
     /**

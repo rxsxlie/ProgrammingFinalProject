@@ -1,15 +1,14 @@
 package ss.Scrabble;
 
-import java.util.HashMap;
-import java.util.Map;
 
-public class Tile {
+public class Tile{
     private int value;
     private char letter;
 
-    public Tile(int value, char letter){
-        this.value = value;
+    public Tile(char letter, int value){
+        super();
         this.letter = letter;
+        this.value = value;
     }
 
     public int getValue() {
