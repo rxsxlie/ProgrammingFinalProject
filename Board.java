@@ -1,8 +1,5 @@
 package ss.Scrabble;
 
-
-import java.util.Arrays;
-
 /**
  * Board for the Tic Tac Toe game. Module 2 lab assignment.
  *
@@ -106,7 +103,7 @@ public class Board {
     }
 
     public void setPremiumField(int row, int col, Cell.CellValue cellValue){
-        this.cells[row][col] = new Cell(cellValue);
+        this.cells[row-1][col-1] = new Cell(cellValue);
     }
 
     public void setDefaultPremiumFields(){
@@ -212,43 +209,108 @@ public class Board {
     }
 
 
-    public boolean hasWordSpaceHorizontal(int row, int col, String word) {
+    public boolean isValidWordSpaceHorizontal(int row, int col, String word) {
+        char[] letters = word.toCharArray();
+        boolean overlaps = false;
+        int lettersI = 0;
+        if(isBoardEmpty()){
+            overlaps = true;
+        }
         for(int i = col; i < (col+word.length()); i++){
-            if(!isEmptyField(row, i) || !isField(row, i)){
+            if(!isField(row, i)){
                 return false;
             }
+            if(!isEmptyField(row, i)){
+                if(getField(row, i).getLetter() == letters[lettersI]){
+                    overlaps = true;
+                }
+            }
+            lettersI++;
         }
-        return true;
+        return overlaps;
     }
 
-    public boolean hasWordSpaceVertical(int row, int col, String word) {
+    public boolean isValidWordSpaceVertical(int row, int col, String word) {
+        char[] letters = word.toCharArray();
+        boolean overlaps = false;
+        int lettersI = 0;
+        if(isBoardEmpty()){
+            overlaps = true;
+        }
         for(int i = row; i < (row+word.length()); i++){
-            if(!isEmptyField(i, col) || !isField(i, col)){
+            if(!isField(i, col)){
                 return false;
             }
+            if(!isEmptyField(i, col)){
+                if(getField(i, col).getLetter() == letters[lettersI]){
+                    overlaps = true;
+                }
+            }
+            lettersI++;
         }
-        return true;
+        return overlaps;
     }
 
-    public void setWordHorizontal(int row, int col, String word){
+    public String getTilesToPlayHorizontal(int row, int col, String word){
         char[] wordArray = word.toCharArray();
         int i = 0;
-        if(this.hasWordSpaceHorizontal(row, col, word)) {
+        String lettersToPlay = "";
+        for (char letter : wordArray) {
+            if (getField(row, (col + i)).getLetter() == ' ') {
+                lettersToPlay += letter;
+            }
+            i++;
+        }
+        return lettersToPlay;
+    }
+
+    public String getTilesToPlayVertical(int row, int col, String word){
+        char[] wordArray = word.toCharArray();
+        int i = 0;
+        String lettersToPlay = "";
+        if(this.isValidWordSpaceVertical(row, col, word)) {
             for (char letter : wordArray) {
-                setField(row, (col + i), letter);
+                if (getField((row+i), col).getLetter() == ' ') {
+                    lettersToPlay += letter;
+                }
                 i++;
             }
         } else {
             System.out.println("There is no space for this word on the board");
         }
+        return lettersToPlay;
+    }
+
+    public void setWordHorizontal(int row, int col, String word){
+        char[] wordArray = word.toCharArray();
+        int i = 0;
+        for (char letter : wordArray) {
+            if (getField(row, (col + i)).getLetter() == ' ') {
+                setField(row, (col + i), letter);
+            }
+            i++;
+        }
+    }
+
+    public boolean isBoardEmpty(){
+        for(Cell[] cs : this.cells){
+            for(Cell c : cs){
+                if(c.getLetter() != ' '){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void setWordVertical(int row, int col, String word){
         char[] wordArray = word.toCharArray();
         int i = 0;
-        if(this.hasWordSpaceVertical(row, col, word)) {
+        if(this.isValidWordSpaceVertical(row, col, word)) {
             for (char letter : wordArray) {
-                setField((row + i), col, letter);
+                if(getField((row+i), col).getLetter() == ' ') {
+                    setField((row + i), col, letter);
+                }
                 i++;
             }
         } else {
@@ -289,14 +351,14 @@ public class Board {
         for (int i = 0; i < DIM; i++) {
             String row = "";
             for (int j = 0; j < DIM; j++) {
-                row = row + " " + getField(i, j).toString() + " ";
+                row = row + " " + getField(i, j).toString() + "  ";
                 if (j < DIM - 1) {
                     row = row + "|";
                 }
             }
-            s = s + row + DELIM + NUMBERING[i * 2];
+            s = s + row + DELIM;
             if (i < DIM - 1) {
-                s = s + "\n" + LINE + DELIM + NUMBERING[i * 2 + 1] + "\n";
+                s = s + "\n" + LINE + DELIM + "\n";
             }
         }
         return s;

@@ -1,5 +1,6 @@
 package ss.Scrabble;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Rack {
@@ -8,6 +9,16 @@ public class Rack {
 
     public Rack(){
         lettersOnRack = 7;
+        this.tileSet = getEmptyTileSet();
+    }
+
+    public Set<Tile> getEmptyTileSet(){
+        Set<Tile> emptyTileSet = new HashSet<Tile>();
+        for(int i = 0; i < this.lettersOnRack; i++){
+            Tile temp = new Tile(' ', 0);
+            emptyTileSet.add(temp);
+        }
+        return emptyTileSet;
     }
 
     public Set<Tile> getTileSet(){
@@ -24,9 +35,26 @@ public class Rack {
         }
     }
 
-    public void removeTiles(Set<Tile> word){
-        for(Tile t : word){
-            this.tileSet.remove(t);
+    public void removeTiles(Set<Tile> playedTiles){
+        for(Tile playedTile : playedTiles) {
+            this.tileSet.removeIf(rackTile -> rackTile.getLetter() == playedTile.getLetter());
         }
+    }
+
+    public Set<Tile> getCopy(){
+        Set<Tile> copy = new HashSet<Tile>();
+        for(Tile t : this.tileSet){
+            Tile copyT = new Tile(t.getLetter(), t.getValue());
+            copy.add(copyT);
+        }
+        return copy;
+    }
+
+    public String toString(){
+        String out = "Your rack: \n";
+        for (Tile t : tileSet){
+            out += "- | " + t.getLetter() + " | -";
+        }
+        return out;
     }
 }

@@ -11,12 +11,12 @@ public class Dictionary {
     public Set<String> dictionary;
 
     public Dictionary() throws IOException {
-        this.dictionary = getDictionary();
+
     }
 
     public Set<String> getDictionary() throws IOException {
         Set<String> result = new HashSet<String>();
-        BufferedReader reader = new BufferedReader(new FileReader("ss/Scrabble/dictionary.txt"));
+        BufferedReader reader = new BufferedReader(new FileReader("src/ss/Scrabble/dictionary.txt"));
         String word = "";
         while((word = reader.readLine()) != null){
             result.add(word);

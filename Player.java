@@ -17,10 +17,6 @@ public class Player {
         return this.name;
     }
 
-    public void setName(String name){
-        this.name = name;
-    }
-
     public Rack getRack(){
         return this.rack;
     }
@@ -29,17 +25,12 @@ public class Player {
         this.rack.putNewTilesOnRack(newTiles);
     }
 
-    public String rackToString(){
-        Set<Tile> tilesOnRack = this.rack.getTileSet();
-        String res = "";
-        for(Tile t : tilesOnRack){
-            res += (" - " + t.getLetter() + " - ");
-        }
-        return res + "\n";
-    }
-
     public void addPoints(int points){
         this.score += points;
+    }
+
+    public int getScore(){
+        return this.score;
     }
 
 

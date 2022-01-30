@@ -12,7 +12,7 @@ public class Cell {
 
     public Cell(CellValue cellValue){
         this.cellValue = cellValue;
-        this.tile = null;
+        this.tile = new Tile(' ', 0);
     }
 
     public char getLetter(){
@@ -25,6 +25,10 @@ public class Cell {
 
     public CellValue getCellValue(){
         return this.cellValue;
+    }
+
+    public String toString(){
+        return String.valueOf(this.tile.getLetter());
     }
 }
 

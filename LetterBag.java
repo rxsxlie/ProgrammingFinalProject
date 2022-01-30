@@ -1,17 +1,18 @@
 package ss.Scrabble;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LetterBag {
     Map<Tile, Integer> lettersLeft;
     Random rand = new Random();
 
     public LetterBag(){
-        lettersLeft = this.setInitLetters();
+        lettersLeft = this.fillLetterBag();
     }
 
-    public Map<Tile,Integer> setInitLetters(){
-        Map<Tile, Integer> lettersLeft = new HashMap<Tile, Integer>();
+    public Map<Tile,Integer> fillLetterBag(){
+        Map<Tile, Integer> lettersLeft = new ConcurrentHashMap<Tile, Integer>();
         Set<Tile> tiles = this.getAlphabetTiles();
         int[] startTileAmount = new int[]{9,2,2,4,12,2,2,2,8,2,2,4,2,6,8,2,1,6,4,6,4,2,2,1,2,1,2};
         int i = 0;
@@ -33,7 +34,7 @@ public class LetterBag {
             tiles.add(t);
             i++;
         }
-        Tile blank = new Tile('b', 0);
+        Tile blank = new Tile('!', 0);
         tiles.add(blank);
         return tiles;
     }
