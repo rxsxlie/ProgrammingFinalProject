@@ -23,4 +23,10 @@ public class Rack {
             this.tileSet.addAll(newTiles);
         }
     }
+
+    public void removeTiles(Set<Tile> word){
+        for(Tile t : word){
+            this.tileSet.remove(t);
+        }
+    }
 }

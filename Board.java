@@ -34,13 +34,14 @@ public class Board {
      * @ensures all fields are EMPTY
      */
     public Board() {
-            this.cells = new Cell[DIM][DIM];
-            for (int row = 0; row < DIM; row++){
-                for (int col = 0; col < DIM; col++){
-                    cells[row][col] = new Cell(Cell.CellValue.NORMAL);
-                }
+        this.cells = new Cell[DIM][DIM];
+        for (int row = 0; row < DIM; row++){
+            for (int col = 0; col < DIM; col++){
+                cells[row][col] = new Cell(Cell.CellValue.NORMAL);
             }
-            reset();
+        }
+        setDefaultPremiumFields();
+        reset();
     }
 
     public static String createNumberingLine(int startPoint){
@@ -65,6 +66,10 @@ public class Board {
         return numbering;
     }
 
+    public Cell[][] getCells(){
+        return this.cells;
+    }
+
     /**
      * Creates a deep copy of this field.
      * @ensures the result is a new object, so not this object
@@ -84,7 +89,7 @@ public class Board {
     public boolean isField(int row, int col) {
         return row < DIM && col < DIM && row >= 0 && col >= 0;
     }
-    
+
     /**
      * Returns the content of the field i.
      * @requires i to be a valid field
@@ -256,7 +261,7 @@ public class Board {
      * Checks if the mark m has won. A mark wins if it controls at
      * least one row, column or diagonal.
      * @requires m to be either XX or OO
-     * @ensures true when m has a row, column or diagonal 
+     * @ensures true when m has a row, column or diagonal
      * @return true if the mark has won
      */
     public boolean isWinner() {
@@ -316,7 +321,7 @@ public class Board {
      * @ensures field i to be set to Mark m
      */
     public void setField(int row, int col, char c) {
-    	this.cells[row][col].setLetter(c);
+        this.cells[row][col].setLetter(c);
     }
 
 

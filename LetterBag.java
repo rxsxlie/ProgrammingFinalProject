@@ -12,7 +12,7 @@ public class LetterBag {
 
     public Map<Tile,Integer> setInitLetters(){
         Map<Tile, Integer> lettersLeft = new HashMap<Tile, Integer>();
-        Set<Tile> tiles = this.createTiles();
+        Set<Tile> tiles = this.getAlphabetTiles();
         int[] startTileAmount = new int[]{9,2,2,4,12,2,2,2,8,2,2,4,2,6,8,2,1,6,4,6,4,2,2,1,2,1,2};
         int i = 0;
         for(Tile t : tiles){
@@ -23,7 +23,7 @@ public class LetterBag {
     }
 
 
-    public Set<Tile> createTiles(){
+    public Set<Tile> getAlphabetTiles(){
         Set<Tile> tiles = new HashSet<Tile>();
         int[] tileValues = new int[]{1,3,3,2,1,4,2,4,1,8,5,1,3,1,1,3,10,1,1,1,1,4,4,8,4,10};
         int i = 0;

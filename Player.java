@@ -5,10 +5,12 @@ import java.util.Set;
 public class Player {
     String name;
     Rack rack;
+    int score;
 
     public Player(String name){
         this.name = name;
         this.rack = new Rack();
+        this.score = 0;
     }
 
     public String getName(){
@@ -34,6 +36,10 @@ public class Player {
             res += (" - " + t.getLetter() + " - ");
         }
         return res + "\n";
+    }
+
+    public void addPoints(int points){
+        this.score += points;
     }
 
 
