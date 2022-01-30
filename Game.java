@@ -11,11 +11,11 @@ public class Game {
     Board board;
     Player[] players;
     LetterBag letterBag;
-    Dictionary dictionary;
+    Set<String> dictionary;
     Util util;
     Map<Character, Integer> alphToInt = new HashMap<Character, Integer>();
 
-    public Game(String[] playerNames){
+    public Game(String[] playerNames) throws IOException {
         this.players = new Player[playerNames.length];
         int i = 0;
         for(Player p : players){
@@ -24,7 +24,7 @@ public class Game {
         }
         this.board = new Board();
         this.letterBag = new LetterBag();
-        this.dictionary = new Dictionary();
+        this.dictionary = (Set<String>) new Dictionary();
         util = new Util(this.letterBag, this.board);
     }
 
@@ -40,7 +40,6 @@ public class Game {
     }
 
     public void start() throws IOException {
-        this.dictionary = (Dictionary) dictionary.getDictionary();
         for(Player p : players){
             Set<Tile> initTiles = letterBag.getRandomTiles(7);
             p.setRack(initTiles);
@@ -53,8 +52,10 @@ public class Game {
         String move = input[1];
         if(makemove.equals("MAKEMOVE")){
             if(move.equals("WORD")){
-                this.playWord(input[2], input[3], input[4], p);
-                giveNewTilesToPlayer(input[4], p);
+                if(isInDictionary(input[4])) {
+                    this.playWord(input[2], input[3], input[4], p);
+                    giveNewTilesToPlayer(input[4], p);
+                }
             } else if(move.equals("SWAP")){
                 String lettersToRemove = swapLetters(input[2]);
                 giveNewTilesToPlayer(lettersToRemove, p);
@@ -111,6 +112,11 @@ public class Game {
     }
 
     public boolean isInDictionary(String word){
+        for(String dictEnrty : this.dictionary){
+            if(dictEnrty.equals(word)){
+                return true;
+            }
+        }
         return false;
     }
 
