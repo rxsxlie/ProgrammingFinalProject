@@ -57,7 +57,7 @@ public class Board {
                 numbering[i] = createNumberingLine(startPoint);
                 startPoint += 15;
             } else {
-                numbering[i] = ("+---++---++---++---++---++---++---++---++---++---++---++---++---++---++---+");
+                numbering[i] = ("__________________________________________________________________________");
             }
         }
         return numbering;
@@ -347,9 +347,9 @@ public class Board {
      * @return the game situation as String
      */
     public String toString() {
-        String s = "";
+        String s = "   A    B    C    D    E    F    G    H    I    J    K    L    M    N    O    \n" + "__________________________________________________________________________ \n";
         for (int i = 0; i < DIM; i++) {
-            String row = "";
+            String row = String.valueOf(i+1);
             for (int j = 0; j < DIM; j++) {
                 row = row + " " + getField(i, j).toString() + "  ";
                 if (j < DIM - 1) {

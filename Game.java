@@ -58,40 +58,42 @@ public class Game {
             if(move.equals("WORD")){
                 if(isInDictionary(input[4])) {
                     this.playWord(input[2], input[3], input[4], p);
-                    giveNewTilesToPlayer(input[4], p);
+                    giveNewTilesToPlayer(input[4].length(), p);
                 }
             } else if(move.equals("SWAP")){
-                String lettersToRemove = swapLetters(input[2]);
-                giveNewTilesToPlayer(lettersToRemove, p);
+                removeSwapped(input[2], p);
+                giveNewTilesToPlayer(input[2].length(), p);
             }
         }
     }
 
-    public void giveNewTilesToPlayer(String playedWord, Player p){
+    public void giveNewTilesToPlayer(int num, Player p){
 //        p.getRack().removeTiles(util.getWordTiles(playedWord));
-        if(this.letterBag.numTilesLeft() >= playedWord.length()){
-            p.getRack().putNewTilesOnRack(letterBag.getRandomTiles(playedWord.length()));
+        if(this.letterBag.numTilesLeft() >= num){
+            p.getRack().putNewTilesOnRack(letterBag.getRandomTiles(num));
         } else {
             p.getRack().putNewTilesOnRack(letterBag.getRandomTiles(letterBag.numTilesLeft()));
         }
     }
 
-    public String swapLetters(String letters){
+    public void removeSwapped(String letters, Player p){
+        Set<Tile> swapped = new HashSet<Tile>();
         char[] letterArr = letters.toCharArray();
-        String lettersToRemove = "";
-        int i = 0;
-        while(letterArr[i] == '!'){
-            lettersToRemove += letterArr[i];
-            i++;
+        for(char letter : letterArr) {
+            for (Tile rackTile : p.getRack().getCopy()) {
+                if (rackTile.getLetter() == letter) {
+                    p.getRack().getTileSet().remove(rackTile);
+                    swapped.add(rackTile);
+                }
+            }
         }
-        return lettersToRemove;
     }
 
     public void playWord(String pos, String orientation, String word, Player p){
         boolean hasAllTiles = true;
         char[] startPos = pos.toCharArray();
         char c = startPos[0];
-        int col = alphToInt.get(c)-1;
+        int col = alphToInt.get(c);
         String r = "";
         int row;
         if(startPos.length > 2){
@@ -99,7 +101,7 @@ public class Game {
         } else {
             r += startPos[1];
         }
-        row = Integer.parseInt(r);
+        row = Integer.parseInt(r) - 1;
         Set<Tile> copyRack = p.getRack().getCopy();
         if(orientation.equals("H") && this.board.isValidWordSpaceHorizontal(row, col, word)){
             String tilesToPlay = this.board.getTilesToPlayHorizontal(row, col, word);
@@ -117,6 +119,7 @@ public class Game {
             if(hasAllTiles){
                 this.board.setWordVertical(row, col, word);
                 p.addPoints(util.getWordValueOnBoardVertical(row, col, word));
+                p.getRack().removeTiles(tilesToPlaySet);
             }
         }
     }
@@ -160,6 +163,7 @@ public class Game {
             this.alphToInt.put(c, i);
             i++;
         }
+        System.out.println(this.alphToInt);
     }
 
 

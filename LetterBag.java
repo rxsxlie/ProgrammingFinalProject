@@ -66,13 +66,27 @@ public class LetterBag {
 
     public void removeLetterFromLetterBag(Tile tile){
         for(Tile t : this.lettersLeft.keySet()){
-            if(t == tile){
+            if(t.getLetter() == tile.getLetter()){
                 if (t.getValue() > 1) {
-                    lettersLeft.put(t, t.getValue() - 1);
+                    int left = t.getValue() - 1;
+                    lettersLeft.remove(t);
+                    lettersLeft.put(t, left);
                 } else if (t.getValue() == 1) {
                     lettersLeft.remove(t);
                 } else {
                     System.out.println("Letter could not be removed from letter bag");
+                }
+            }
+        }
+    }
+
+    public void putInLetterBag(Set<Tile> tiles){
+        for(Tile returnedTile : tiles){
+            for(Tile bagTile : this.lettersLeft.keySet()){
+                if(returnedTile.getLetter() == bagTile.getLetter()){
+                    int left = lettersLeft.get(bagTile) + 1;
+                    lettersLeft.remove(bagTile);
+                    lettersLeft.put(bagTile, left);
                 }
             }
         }

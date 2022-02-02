@@ -43,8 +43,8 @@ public class Util {
 
     public int getWordValueOnBoardHorizontal(int row, int col, String word){
         int count = 0;
-        int dwCount = 0;
-        int twCount = 0;
+        int dwCount = 1;
+        int twCount = 1;
         Set<Tile> wordTiles = getWordTiles(word);
         for(int i = col; i < (col+word.length()); i++){
             Tile t = wordTiles.iterator().next();
@@ -53,6 +53,7 @@ public class Util {
             } else if (this.board.getCells()[row][i].getCellValue() == Cell.CellValue.TRIPLE_LETTER){
                 count += (t.getValue()*3);
             } else if (this.board.getCells()[row][i].getCellValue() == Cell.CellValue.DOUBLE_WORD){
+                System.out.println("Double word");
                 dwCount += 1;
                 count += t.getValue();
             } else if (this.board.getCells()[row][i].getCellValue() == Cell.CellValue.TRIPLE_WORD) {
@@ -62,13 +63,14 @@ public class Util {
                 count += t.getValue();
             }
         }
+        System.out.println(count * 2 * 3 * dwCount * twCount);
         return count * 2 * 3 * dwCount * twCount;
     }
 
     public int getWordValueOnBoardVertical(int row, int col, String word){
         int count = 0;
-        int dwCount = 0;
-        int twCount = 0;
+        int dwCount = 1;
+        int twCount = 1;
         Set<Tile> wordTiles = getWordTiles(word);
         for(int i = row; i < (row+word.length()); i++){
             Tile t = wordTiles.iterator().next();

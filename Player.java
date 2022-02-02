@@ -23,6 +23,8 @@ public class Player {
 
     public void setRack(Set<Tile> newTiles){
         this.rack.putNewTilesOnRack(newTiles);
+        Set<Tile> empty = this.rack.getEmptyTileSet();
+        this.rack.removeTiles(empty);
     }
 
     public void addPoints(int points){
