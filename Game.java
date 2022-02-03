@@ -1,5 +1,6 @@
 package ss.Scrabble;
 
+import jdk.swing.interop.SwingInterOpUtils;
 import ss.utils.TextIO;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ public class Game {
     Player[] players;
     LetterBag letterBag;
     Dictionary dict;
+    List<String> playedWords;
     Set<String> dictionary;
     Util util;
     Map<Character, Integer> alphToInt = new HashMap<Character, Integer>();
@@ -19,6 +21,7 @@ public class Game {
         this.board = new Board();
         this.letterBag = new LetterBag();
         this.dict = new Dictionary();
+        this.playedWords = new ArrayList<String>();
         util = new Util(this.letterBag, this.board);
     }
 
@@ -55,6 +58,11 @@ public class Game {
                 while(!hasPlayed) {
                     if(isInDictionary(input[4])) {
                         hasPlayed = this.playWord(input[2], input[3], input[4], p);
+                        if(!hasPlayed){
+                            turn(p);
+                        } else {
+                            return;
+                        }
                     } else {
                         turn(p);
                     }
@@ -82,6 +90,7 @@ public class Game {
             for (Tile rackTile : p.getRack().getTileSet()) {
                 if (rackTile.getLetter() == letter) {
                     swapped.add(rackTile);
+                    break;
                 }
             }
         }
@@ -109,35 +118,86 @@ public class Game {
         }
 
         row = Integer.parseInt(r) - 1;
-        Set<Tile> copyRack = p.getRack().getCopy();
+        List<Tile> copyRack = p.getRack().getCopy();
 
         if(orientation.equals("H") && this.board.isValidWordSpaceHorizontal(row, col, word)){
+            List<String> oldWords = this.board.getWordsOnBoard();
             String playLetters = this.board.getLettersToPlayHorizontal(row, col, word);
             List<Tile> tilesToPlaySet = util.getWordTiles(playLetters);
             hasAllTiles = hasAllTiles(tilesToPlaySet, copyRack, p);
-            if(hasAllTiles){
+            if (hasAllTiles) {
                 this.board.setWordHorizontal(row, col, word);
-                p.addPoints(util.getWordValueOnBoardHorizontal(row, col, word));
+                List<String> words = this.board.getWordsOnBoard();
+                List<String> newWords = getExtraPoints(word, oldWords, words);
+                for(String w : newWords){
+                    if(!isInDictionary(w)){
+                        return false;
+                    }
+                }
+                int extra = getExtraPoints(newWords);
+                p.addPoints(util.getWordValueOnBoardHorizontal(row, col, word) + extra);
                 p.getRack().removeTiles(tilesToPlaySet);
                 giveNewTilesToPlayer(playLetters.length(), p);
+                this.playedWords.add(word);
                 return true;
+            } else {
+                return false;
             }
         } else if(orientation.equals("V") && this.board.isValidWordSpaceVertical(row, col, word)){
+            List<String> oldWords = this.board.getWordsOnBoard();
             String playLetters = this.board.getLettersToPlayVertical(row, col, word);
             List<Tile> tilesToPlaySet = util.getWordTiles(playLetters);
             hasAllTiles = hasAllTiles(tilesToPlaySet, copyRack, p);
-            if(hasAllTiles){
+            if (hasAllTiles) {
                 this.board.setWordVertical(row, col, word);
-                p.addPoints(util.getWordValueOnBoardVertical(row, col, word));
+                List<String> words = this.board.getWordsOnBoard();
+                System.out.println("WORDS: " + words);
+                List<String> newWords = getExtraPoints(word, oldWords, words);
+                System.out.println("NEWWORDS: " + newWords);
+
+                for(String w : newWords){
+                    if(!isInDictionary(w)){
+                        return false;
+                    }
+                }
+                int extra = getExtraPoints(newWords);
+                p.addPoints(util.getWordValueOnBoardVertical(row, col, word) + extra);
                 p.getRack().removeTiles(tilesToPlaySet);
                 giveNewTilesToPlayer(playLetters.length(), p);
+                this.playedWords.add(word);
                 return true;
+            } else {
+                return false;
             }
+        } else {
+            System.out.println("This is not a valid space for your word.");
+            return false;
         }
-        return false;
     }
 
-    private boolean hasAllTiles(List<Tile> tilesToPlaySet, Set<Tile> copyRack, Player p) {
+    public List<String> getExtraPoints(String word, List<String> oldWords, List<String> newWords){
+        List<String> words = new ArrayList<>();
+        for(String newWord : newWords){
+            if(!oldWords.contains(newWord) && newWord != word){
+                words.add(newWord);
+            }
+        }
+        return words;
+    }
+
+    public int getExtraPoints(List<String> words){
+        int extraPoints = 0;
+        for(String w : words){
+            if(isInDictionary(w)) {
+                extraPoints += util.getWordValue(w);
+            } else {
+                break;
+            }
+        }
+        return extraPoints;
+    }
+
+    private boolean hasAllTiles(List<Tile> tilesToPlaySet, List<Tile> copyRack, Player p) {
         for(Tile wordTile : tilesToPlaySet) {
             boolean tileRemoved = false;
             for (Tile playersTile : p.getRack().getTileSet()) {
@@ -168,7 +228,7 @@ public class Game {
                 return true;
             }
         }
-        System.out.println("This word is not in the dictionary");
+        System.out.println(word + " is not in the dictionary.");
         return false;
     }
 

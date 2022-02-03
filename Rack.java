@@ -43,8 +43,8 @@ public class Rack {
         }
     }
 
-    public Set<Tile> getCopy(){
-        Set<Tile> copy = new HashSet<Tile>();
+    public List<Tile> getCopy(){
+        List<Tile> copy = new ArrayList<>();
         for(Tile t : this.tileSet){
             Tile copyT = new Tile(t.getLetter(), t.getValue());
             copy.add(copyT);

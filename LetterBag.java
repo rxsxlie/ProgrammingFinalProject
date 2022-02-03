@@ -39,7 +39,6 @@ public class LetterBag {
         return tiles;
     }
 
-
     public int numTilesLeft(){
         int count = 0;
         for(Tile t : this.lettersLeft.keySet()){
@@ -69,9 +68,10 @@ public class LetterBag {
         for(Tile t : this.lettersLeft.keySet()){
             if(t.getLetter() == tile.getLetter()){
                 if (t.getValue() > 1) {
+                    Tile temp = new Tile(t.getLetter(), t.getValue());
                     int left = t.getValue() - 1;
                     lettersLeft.remove(t);
-                    lettersLeft.put(t, left);
+                    lettersLeft.put(temp, left);
                 } else if (t.getValue() == 1) {
                     lettersLeft.remove(t);
                 } else {
