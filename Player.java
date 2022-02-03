@@ -1,5 +1,6 @@
 package ss.Scrabble;
 
+import java.util.List;
 import java.util.Set;
 
 public class Player {
@@ -21,10 +22,12 @@ public class Player {
         return this.rack;
     }
 
-    public void setRack(Set<Tile> newTiles){
-        this.rack.putNewTilesOnRack(newTiles);
-        Set<Tile> empty = this.rack.getEmptyTileSet();
+    public void setRack(List<Tile> newTiles){
+        //remove place holders
+        List<Tile> empty = this.rack.getEmptyTileSet();
         this.rack.removeTiles(empty);
+        //append init tiles
+        this.rack.putNewTilesOnRack(newTiles);
     }
 
     public void addPoints(int points){

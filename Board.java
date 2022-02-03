@@ -214,8 +214,18 @@ public class Board {
         boolean overlaps = false;
         int lettersI = 0;
         if(isBoardEmpty()){
-            overlaps = true;
-        }
+            for(int i = col; i < (col+word.length()); i++){
+                if(!isField(row, i)){
+                    System.out.println("Space is out of scope of the board");
+                    return false;
+                }
+                if(row == 7 && i == 7){
+                    System.out.println("Overlapping H8!");
+                    overlaps = true;
+                }
+                lettersI++;
+            }
+        } else {
         for(int i = col; i < (col+word.length()); i++){
             if(!isField(row, i)){
                 return false;
@@ -227,6 +237,7 @@ public class Board {
             }
             lettersI++;
         }
+        }
         return overlaps;
     }
 
@@ -235,23 +246,34 @@ public class Board {
         boolean overlaps = false;
         int lettersI = 0;
         if(isBoardEmpty()){
-            overlaps = true;
-        }
-        for(int i = row; i < (row+word.length()); i++){
-            if(!isField(i, col)){
-                return false;
-            }
-            if(!isEmptyField(i, col)){
-                if(getField(i, col).getLetter() == letters[lettersI]){
-                    overlaps = true;
+            for(int i = col; i < (col+word.length()); i++){
+                if(!isField(row, i)){
+                    System.out.println("Space is out of scope of the board");
+                    return false;
                 }
+                if(row == 7 && i == 7){
+                    overlaps = true;
+                    System.out.println("Overlapping H8!");
+                }
+                lettersI++;
             }
-            lettersI++;
+        } else {
+            for (int i = row; i < (row + word.length()); i++) {
+                if (!isField(i, col)) {
+                    return false;
+                }
+                if (!isEmptyField(i, col)) {
+                    if (getField(i, col).getLetter() == letters[lettersI]) {
+                        overlaps = true;
+                    }
+                }
+                lettersI++;
+            }
         }
         return overlaps;
     }
 
-    public String getTilesToPlayHorizontal(int row, int col, String word){
+    public String getLettersToPlayHorizontal(int row, int col, String word){
         char[] wordArray = word.toCharArray();
         int i = 0;
         String lettersToPlay = "";
@@ -261,23 +283,21 @@ public class Board {
             }
             i++;
         }
+        System.out.println(lettersToPlay);
         return lettersToPlay;
     }
 
-    public String getTilesToPlayVertical(int row, int col, String word){
+    public String getLettersToPlayVertical(int row, int col, String word){
         char[] wordArray = word.toCharArray();
         int i = 0;
         String lettersToPlay = "";
-        if(this.isValidWordSpaceVertical(row, col, word)) {
-            for (char letter : wordArray) {
-                if (getField((row+i), col).getLetter() == ' ') {
-                    lettersToPlay += letter;
-                }
-                i++;
+        for (char letter : wordArray) {
+            if (getField((row+i), col).getLetter() == ' ') {
+                lettersToPlay += letter;
             }
-        } else {
-            System.out.println("There is no space for this word on the board");
+            i++;
         }
+        System.out.println(lettersToPlay);
         return lettersToPlay;
     }
 
@@ -285,9 +305,7 @@ public class Board {
         char[] wordArray = word.toCharArray();
         int i = 0;
         for (char letter : wordArray) {
-            if (getField(row, (col + i)).getLetter() == ' ') {
-                setField(row, (col + i), letter);
-            }
+            setField(row, (col + i), letter);
             i++;
         }
     }

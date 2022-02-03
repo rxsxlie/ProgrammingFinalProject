@@ -1,12 +1,11 @@
 package ss.Scrabble;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Util {
     LetterBag letterBag;
     Board board;
-    Set<Tile> tilesSet;
+    List<Tile> tilesSet;
 
     public Util(LetterBag letterBag, Board board){
         this.letterBag = letterBag;
@@ -27,53 +26,58 @@ public class Util {
         return count;
     }
 
-    public Set<Tile> getWordTiles(String word){
+    public List<Tile> getWordTiles(String word){
         char[] letters = word.toCharArray();
-        Set<Tile> tiles = letterBag.getAlphabetTiles();
-        Set<Tile> wordTiles = new HashSet<Tile>();
+        List<Tile> tiles = letterBag.getAlphabetTiles();
+        List<Tile> wordTilesList = new ArrayList<>(word.length());
         for(int i = 0; i < letters.length; i++){
             for(Tile t : tiles){
                 if(letters[i] == t.getLetter()){
-                    wordTiles.add(t);
+                    Tile temp = new Tile(letters[i], t.getValue());
+                    wordTilesList.add(i, temp);
                 }
             }
         }
-        return wordTiles;
+        return wordTilesList;
     }
 
     public int getWordValueOnBoardHorizontal(int row, int col, String word){
         int count = 0;
-        int dwCount = 1;
-        int twCount = 1;
-        Set<Tile> wordTiles = getWordTiles(word);
+        int dwCount = 0;
+        int twCount = 0;
+        int letterIdx = 0;
+        List<Tile> wordTiles = getWordTiles(word);
         for(int i = col; i < (col+word.length()); i++){
-            Tile t = wordTiles.iterator().next();
+            Tile t = wordTiles.get(letterIdx);
+            System.out.println(t.getLetter() + "; " + t.getValue());
             if(this.board.getCells()[row][i].getCellValue() == Cell.CellValue.DOUBLE_LETTER){
                 count += (t.getValue()*2);
             } else if (this.board.getCells()[row][i].getCellValue() == Cell.CellValue.TRIPLE_LETTER){
                 count += (t.getValue()*3);
             } else if (this.board.getCells()[row][i].getCellValue() == Cell.CellValue.DOUBLE_WORD){
                 System.out.println("Double word");
-                dwCount += 1;
+                dwCount++;
                 count += t.getValue();
             } else if (this.board.getCells()[row][i].getCellValue() == Cell.CellValue.TRIPLE_WORD) {
-                twCount += 1;
+                twCount++;
                 count += t.getValue();
             } else {
                 count += t.getValue();
             }
+            letterIdx ++;
+            System.out.println("Intermediate count: " + count);
         }
-        System.out.println(count * 2 * 3 * dwCount * twCount);
-        return count * 2 * 3 * dwCount * twCount;
+        return (int) (count * Math.pow(2, dwCount) * Math.pow(3, twCount));
     }
 
     public int getWordValueOnBoardVertical(int row, int col, String word){
         int count = 0;
-        int dwCount = 1;
-        int twCount = 1;
-        Set<Tile> wordTiles = getWordTiles(word);
+        int dwCount = 0;
+        int twCount = 0;
+        int letterIdx = 0;
+        List<Tile> wordTiles = getWordTiles(word);
         for(int i = row; i < (row+word.length()); i++){
-            Tile t = wordTiles.iterator().next();
+            Tile t = wordTiles.get(letterIdx);
             if(this.board.getCells()[i][col].getCellValue() == Cell.CellValue.DOUBLE_LETTER){
                 count += (t.getValue()*2);
             } else if (this.board.getCells()[i][col].getCellValue() == Cell.CellValue.TRIPLE_LETTER){
@@ -87,7 +91,8 @@ public class Util {
             } else {
                 count += t.getValue();
             }
+            letterIdx++;
         }
-        return count * 2 * 3 * dwCount * twCount;
+        return (int) (count * Math.pow(2, dwCount) * Math.pow(3, twCount));
     }
 }

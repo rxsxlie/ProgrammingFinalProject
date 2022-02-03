@@ -13,7 +13,7 @@ public class LetterBag {
 
     public Map<Tile,Integer> fillLetterBag(){
         Map<Tile, Integer> lettersLeft = new ConcurrentHashMap<Tile, Integer>();
-        Set<Tile> tiles = this.getAlphabetTiles();
+        List<Tile> tiles = this.getAlphabetTiles();
         int[] startTileAmount = new int[]{9,2,2,4,12,2,2,2,8,2,2,4,2,6,8,2,1,6,4,6,4,2,2,1,2,1,2};
         int i = 0;
         for(Tile t : tiles){
@@ -24,8 +24,8 @@ public class LetterBag {
     }
 
 
-    public Set<Tile> getAlphabetTiles(){
-        Set<Tile> tiles = new HashSet<Tile>();
+    public List<Tile> getAlphabetTiles(){
+        List<Tile> tiles = new ArrayList<>();
         int[] tileValues = new int[]{1,3,3,2,1,4,2,4,1,8,5,1,3,1,1,3,10,1,1,1,1,4,4,8,4,10};
         int i = 0;
 
@@ -48,8 +48,8 @@ public class LetterBag {
         return count;
     }
 
-    public Set<Tile> getRandomTiles(int numTiles){
-        Set<Tile> randomTiles = new HashSet<Tile>();
+    public List<Tile> getRandomTiles(int numTiles){
+        List<Tile> randomTiles = new ArrayList<Tile>();
         while(randomTiles.size() < numTiles){
             int randI = rand.nextInt(this.lettersLeft.keySet().size());
             int i = 0;
@@ -61,6 +61,7 @@ public class LetterBag {
                 i++;
             }
         }
+        System.out.println("Needed tiles: " + numTiles + ", given tiles: " + randomTiles.size());
         return randomTiles;
     }
 

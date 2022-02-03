@@ -1,19 +1,21 @@
 package ss.Scrabble;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Rack {
     int lettersOnRack;
-    Set<Tile> tileSet;
+    List<Tile> tileSet;
 
     public Rack(){
         lettersOnRack = 7;
         this.tileSet = getEmptyTileSet();
     }
 
-    public Set<Tile> getEmptyTileSet(){
-        Set<Tile> emptyTileSet = new HashSet<Tile>();
+    public List<Tile> getEmptyTileSet(){
+        List<Tile> emptyTileSet = new ArrayList<Tile>(this.lettersOnRack);
         for(int i = 0; i < this.lettersOnRack; i++){
             Tile temp = new Tile(' ', 0);
             emptyTileSet.add(temp);
@@ -21,7 +23,7 @@ public class Rack {
         return emptyTileSet;
     }
 
-    public Set<Tile> getTileSet(){
+    public List<Tile> getTileSet(){
         return this.tileSet;
     }
 
@@ -29,13 +31,13 @@ public class Rack {
         return this.tileSet.size();
     }
 
-    public void putNewTilesOnRack(Set<Tile> newTiles){
-        if(newTiles.size()<=7){
+    public void putNewTilesOnRack(List<Tile> newTiles){
+        if(newTiles.size()<=lettersOnRack){
             this.tileSet.addAll(newTiles);
         }
     }
 
-    public void removeTiles(Set<Tile> playedTiles){
+    public void removeTiles(List<Tile> playedTiles){
         for(Tile playedTile : playedTiles) {
             this.tileSet.removeIf(rackTile -> rackTile.getLetter() == playedTile.getLetter());
         }
@@ -52,7 +54,7 @@ public class Rack {
 
     public String toString(){
         String out = "Your rack: \n";
-        for (Tile t : tileSet){
+        for (Tile t : this.tileSet){
             out += "- | " + t.getLetter() + " | -";
         }
         return out;
