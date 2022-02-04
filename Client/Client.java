@@ -49,6 +49,10 @@ public class Client implements Runnable{
                 break;
 
             case "INFORMQUEUE":
+                if (all[1].equals("0")) {
+                    System.out.println("Waiting for other player to play the first move");
+                    break;
+                }
                 System.out.println("There are " + all[1] + " players waiting in the server.");
                 break;
 
@@ -94,12 +98,18 @@ public class Client implements Runnable{
                     System.out.println(this.gameController.printBoard());
                     System.out.println(this.gameController.printRack());
                 }
+                break;
+            case "ERROR":
+                System.err.println(all[1]);
+                break;
         };
 
     }
 
     private void handleTurn() {
         if (this.ourTurn) {
+            System.out.println(this.gameController.printBoard());
+            System.out.println(this.gameController.printRack());
             String move = getUserInput("Please enter a move, options: [to play example -> H8 H AWORD, to skip -> SKIP, to swap -> SWAP {letters to swap}]");
             String[] s = move.split(" ");
             if (s[0].equals("SWAP")) {
@@ -146,11 +156,7 @@ public class Client implements Runnable{
             System.out.println("Oke, bye :(");
             System.exit(0);
         }
-
-
     }
-
-
 
     public String getName() {
         return name;
@@ -171,8 +177,6 @@ public class Client implements Runnable{
         this.name = name;
     }
 
-
-
     private String getIP() {
         return getUserInput("Please tell me the IP of the server:");
     }
@@ -185,7 +189,7 @@ public class Client implements Runnable{
         this.socket = socket;
     }
 
-    //    TODO handle the IO execption
+
     public static void main(String[] args) throws IOException {
         Client client = new Client();
         System.out.println("Client started");

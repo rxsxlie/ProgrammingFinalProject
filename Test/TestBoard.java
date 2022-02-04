@@ -20,9 +20,9 @@ public class TestBoard {
 
     @BeforeEach
     public void setup(){
-        this.board = new Board();
-        this.board.reset();
-        this.tiles = new ArrayList<Tile>();
+        board = new Board();
+        board.reset();
+        tiles = new ArrayList<Tile>();
         tiles.add(new Tile('W', 4));
         tiles.add(new Tile('O', 1));
         tiles.add(new Tile('R', 1));
@@ -78,9 +78,43 @@ public class TestBoard {
     }
 
     @Test
-    public void testWordSpaceHorizontal(){
-        assertTrue(board.isValidWordSpaceHorizontal(0,0, word));
-        board.setWordHorizontal(4,6,word);
-        assertFalse(board.isValidWordSpaceHorizontal(4,6, word));
+    public void testEmptyBoard(){
+        assertTrue(board.isBoardEmpty());
+        board.setWordHorizontal(2,3,word);
+        assertFalse(board.isBoardEmpty());
     }
+
+
+    @Test
+    public void testHasWordSpaceHorizontal(){
+        assertTrue(board.isValidWordSpaceHorizontal(7,7,word));
+        board.setWordHorizontal(3,4, word);
+        assertFalse(board.isValidWordSpaceHorizontal(3,5, word));
+    }
+
+    @Test
+    public void testHasWordSpaceVertical(){
+        assertTrue(board.isValidWordSpaceVertical(7,7,word));
+        board.setWordVertical(3,4, word);
+        assertFalse(board.isValidWordSpaceVertical(4,4, word));
+    }
+
+    @Test
+    public void testWordsOnBoard(){
+        List<String> expected = new ArrayList<>();
+        expected.add("YARD");
+        expected.add("YARDS");
+        board.setWordHorizontal(7,7, "YARD");
+        board.setWordVertical(6,8, "YARDS");
+        assertEquals(expected, board.getWordsOnBoard());
+    }
+
+    @Test
+    public void testLettersToPlay(){
+        String expected = "YRDS";
+        board.setWordHorizontal(7,7, "YARD");
+        assertEquals(expected, board.getLettersToPlayVertical(6,8, "YARDS"));
+    }
+
+
 }

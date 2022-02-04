@@ -7,7 +7,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-//TODO: go through the list of erros and handle them
 
 public class GameServer implements Runnable{
     private ArrayList<ClientHandler> clientHandlers;
@@ -26,10 +25,6 @@ public class GameServer implements Runnable{
 
     public void print(String m) {
         System.out.println(m);
-    }
-
-    public void main() {
-//        TODO maybe
     }
 
     @Override
@@ -57,8 +52,6 @@ public class GameServer implements Runnable{
         GameServer server = new GameServer();
         Thread t = new Thread(server);
         t.start();
-        server.main();
-//        TODO: graceful exit
     }
 
     public void disconnectPlayer(ClientHandler clientHandler) {

@@ -135,7 +135,6 @@ public class ServerGame {
     }
 
     public boolean isInDictionary(String word){
-//        TODO: maybe use contains
         for(String dictEnrty : this.dictionary){
             if(dictEnrty.equals(word)){
                 return true;
@@ -201,7 +200,6 @@ public class ServerGame {
 
 
 
-//        TODO: check if the game should be over
 
         return e;
     }
@@ -250,15 +248,6 @@ public class ServerGame {
         }
     }
 
-    public boolean swap(String name, String rest) {
-//        TODO: swap with the give player
-//        TODO: notify the player with the new boys
-        return false;
-    }
-
-    public void skip(String name) {
-//        TODO: notify all the players about it
-    }
 
     private int[] getRowCol(String pos) {
         char[] startPos = pos.toCharArray();

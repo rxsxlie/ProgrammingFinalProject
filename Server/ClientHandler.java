@@ -93,7 +93,6 @@ public class ClientHandler implements Runnable{
                 break;
 
             case "REQUESTGAME":
-//                TODO: parse game player count if we ever do that
                 this.expectingGame = true;
                 this.server.gameExpected();
 
@@ -103,7 +102,6 @@ public class ClientHandler implements Runnable{
             case "MAKEMOVE":
                 String move = Protocol.getRest(m);
                 Protocol.Error e = this.server.makeMove(this.getName(), move);
-//                TODO; handle invalid move
                 break;
 
             case "ERROR":

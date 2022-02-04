@@ -117,7 +117,6 @@ public class ServerGameController implements Runnable {
             informMove(name, m);
             played = true;
             return Protocol.Error.NoError;
-//            TODO: make this better with the protocol
         }
         if (semiCommand.equals("SKIP")) {
             informMove(name, m);
@@ -142,8 +141,6 @@ public class ServerGameController implements Runnable {
                     this.game.getPlayerByName(name).newLetters = "";
                 }
             }
-        } else {
-//            TODO: handle errors here
         }
         return e;
 

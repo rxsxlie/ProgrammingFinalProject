@@ -5,27 +5,27 @@ import java.util.List;
 
 public class Protocol {
 
-//    TODO: add these to the returns
 //    private static final char MESSAGE_SEPARATOR = '\u001e';
+//    private static final char MESSAGE_SEPARATOR = '\u001f';
     public static final char UNIT_SEPARATOR = ' ';
     public static final char MESSAGE_SEPARATOR = ' ';
 
 
 
     public static String announce(String name) {
-        return "ANNOUNCE " + name;
+        return "ANNOUNCE" + UNIT_SEPARATOR + name + MESSAGE_SEPARATOR;
     }
 
     public static String welcome(String name) {
-        return "WELCOME " + name;
+        return "WELCOME" + UNIT_SEPARATOR + name+ MESSAGE_SEPARATOR;
     }
 
     public static String requestGame(int numPlayers) {
-        return "REQUESTGAME " + numPlayers;
+        return "REQUESTGAME" + UNIT_SEPARATOR + numPlayers+ MESSAGE_SEPARATOR;
     }
 
     public static String informQueue(int inQueue, int numPlayers) {
-        return "INFORMQUEUE " + inQueue +  " " +numPlayers;
+        return "INFORMQUEUE"+ UNIT_SEPARATOR + inQueue +  UNIT_SEPARATOR +numPlayers+ MESSAGE_SEPARATOR;
     }
 
     public static String startGame(ArrayList<String> cs) {
@@ -33,53 +33,52 @@ public class Protocol {
         for(String n : cs){
             nms += n + MESSAGE_SEPARATOR;
         }
-        return "STARTGAME " + nms;
+        return "STARTGAME" +UNIT_SEPARATOR+ nms+ MESSAGE_SEPARATOR;
     }
 
     public static String notifyTurn(String name, int turn) {
-        return "NOTIFYTURN " + turn + " " + name;
+        return "NOTIFYTURN" +UNIT_SEPARATOR+ turn + UNIT_SEPARATOR + name+ MESSAGE_SEPARATOR;
     }
 
     public static String makeMoveWord(String pos, String orientation, String word) {
-        return "MAKEMOVE WORD " + pos + " " + orientation + " " + word;
+        return "MAKEMOVE WORD" +UNIT_SEPARATOR + pos + UNIT_SEPARATOR + orientation + UNIT_SEPARATOR + word+ MESSAGE_SEPARATOR;
     }
 
     public static String makeMoveSwap(String letters) {
-        return "MAKEMOVE SWAP " + letters;
+        return "MAKEMOVE SWAP"+UNIT_SEPARATOR + letters+ MESSAGE_SEPARATOR;
     }
 
     public static String skip() {
-        return "MAKEMOVE" + UNIT_SEPARATOR + "SKIP";
+        return "MAKEMOVE" + UNIT_SEPARATOR + "SKIP"+ MESSAGE_SEPARATOR;
     }
 
     public static String newTiles(String letters) {
-        return "NEWTILES " + letters;
+        return "NEWTILES" +UNIT_SEPARATOR + letters+ MESSAGE_SEPARATOR;
     }
 
     public static String infomMove(String name, String move) {
-        return "INFORMMOVE " + name + " " + move + MESSAGE_SEPARATOR;
+        return "INFORMMOVE"+UNIT_SEPARATOR + name + UNIT_SEPARATOR + move + MESSAGE_SEPARATOR;
     }
 
     public static String gameOver(String n1, String n2, String s1, String s2, String cause) {
-        return "INFORMMOVE" + UNIT_SEPARATOR + cause + UNIT_SEPARATOR + n1 + UNIT_SEPARATOR + s1 + UNIT_SEPARATOR + n2 + UNIT_SEPARATOR + s2;
+        return "INFORMMOVE" + UNIT_SEPARATOR + cause + UNIT_SEPARATOR + n1 + UNIT_SEPARATOR + s1 + UNIT_SEPARATOR + n2 + UNIT_SEPARATOR + s2+ MESSAGE_SEPARATOR;
     }
 
 
     public static String error(Error e) {
-//        TODO: make this with the protocol
-        return "ERROR";
+        return "ERROR" + UNIT_SEPARATOR + e.description+ MESSAGE_SEPARATOR;
     }
 
     public static String parseCommand(String m) {
-        return m.split(" ")[0];
+        return m.split(UNIT_SEPARATOR+"")[0];
     }
 
     public static String[] parseAll(String m) {
-        return m.split(MESSAGE_SEPARATOR+"");
+        return m.split(UNIT_SEPARATOR+"");
     }
 
     public static String getRest(String m) {
-        String[] ms = m.split(" ");
+        String[] ms = m.split(UNIT_SEPARATOR+"");
         StringBuilder res = new StringBuilder();
         for (int i = 0; i < ms.length; i++) {
             if (i == 0) {

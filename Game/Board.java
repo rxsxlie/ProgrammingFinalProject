@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Board for the Tic Tac Toe game. Module 2 lab assignment.
+ * February 2022
+ * Board for the Scrabble game, Programming project, BIT module 2.
  *
- * @author Theo Ruys en Arend Rensink
- * @version $Revision: 1.4 $
+ * @author Rosalie Voorend
  */
 public class Board {
     public static final int DIM = 15;
@@ -20,10 +20,10 @@ public class Board {
     private int numTiles = 100;
 
     /**
-     * The DIM by DIM fields of the Tic Tac Toe board. See NUMBERING for the
+     * The DIM by DIM fields of the Scrabble board. See NUMBERING for the
      * coding of the fields.
      * @invariant there are always DIM*DIM fields
-     * @invariant all fields are either Mark.EMPTY, Mark.XX or Mark.OO
+     * @invariant all cells are either Cell.CellValue NORMAL, DOUBLE_LETTER, TRIPLE_LETTER, DOUBLE_WORD, TRIPLE_WORD
      */
     private Cell[][] cells;
 
@@ -31,7 +31,7 @@ public class Board {
 
     /**
      * Creates an empty board.
-     * @ensures all fields are EMPTY
+     * @ensures all fields are NORMAL
      */
     public Board() {
         this.cells = new Cell[DIM][DIM];
@@ -44,6 +44,10 @@ public class Board {
         reset();
     }
 
+    /**
+     * Creates a line for numbering of the board
+     * @ensures a String with numbers < DIM
+     */
     public static String createNumberingLine(int startPoint){
         String line = "";
         for(int i = startPoint; i < startPoint + 15; i++){
@@ -52,6 +56,10 @@ public class Board {
         return line;
     }
 
+    /**
+     * Creates numbering of the board
+     * @ensures a String with numbers < DIM
+     */
     public static String[] createNumbering(){
         String[] numbering = new String[DIM*DIM-1];
         int startPoint = 1;
@@ -89,6 +97,8 @@ public class Board {
     /**
      * Returns true if index is a valid index of a field on the board.
      * @ensures a positive result when the index is between 0 and DIM*DIM
+     * @param row the number of the field
+     * @param col the number of the field
      * @return true if 0 <= index < DIM*DIM
      */
     public boolean isField(int row, int col) {
@@ -96,10 +106,11 @@ public class Board {
     }
 
     /**
-     * Returns the content of the field i.
-     * @requires i to be a valid field
-     * @ensures the result to be either EMPTY, XX or OO
-     * @param row the number of the field (see NUMBERING)
+     * Returns the content of the field row, col
+     * @requires row and col to be a valid field
+     * @ensures the result to be a Cell
+     * @param row the number of the field
+     * @param col the number of the field
      * @return the mark on the field
      */
     public Cell getField(int row, int col) {
@@ -110,10 +121,22 @@ public class Board {
         }
     }
 
+    /**
+     * Sets the CellValue of a Cell at row, col
+     * @requires row and col to be a valid field
+     * @param row the number of the field
+     * @param col the number of the field
+     * @param cellValue the premium square
+     */
     public void setPremiumField(int row, int col, Cell.CellValue cellValue){
         this.cells[row-1][col-1] = new Cell(cellValue);
     }
 
+    /**
+     * Sets the CellValue of a Cell at row, col
+     * @requires each CellValue is a CellValue
+     * @ensures correct premium fields
+     */
     public void setDefaultPremiumFields(){
 //        Triple word value
         setPremiumField(1,1, Cell.CellValue.TRIPLE_WORD);
@@ -183,9 +206,9 @@ public class Board {
     }
 
     /**
-     * Returns true if the field referred to by the (row,col) pair it empty.
-     * @requires (row, col) to be a valid field
-     * @ensures true when the Mark at (row, col) is EMPTY
+     * Returns true if the field at row, col is empty.
+     * @requires row, col to be a valid field
+     * @ensures true when the Cell has an empty character ' '
      * @param row the row of the field
      * @param col the column of the field
      * @return true if the field is empty
@@ -198,25 +221,15 @@ public class Board {
     }
 
     /**
-     * Tests if the whole board is full.
-     * @ensures true if all fields are occupied
-     * @return true if all fields are occupied
+     * Returns true if the board has space for the word placed at row, col
+     * @requires row, col to be a valid field
+     * @requires word is not null
+     * @ensures true when the board has space for the word placed at row, col
+     * @param row the row of the field
+     * @param col the column of the field
+     * @param word the word to be played
+     * @return true if the board has space for the word placed at row, col
      */
-    public boolean noTilesLeft() {
-        return numTiles == ' ';
-    }
-
-    /**
-     * Returns true if the game is over. The game is over when there is a winner
-     * or the whole board is full.
-     * @ensures true if the board is full or when there is a winner
-     * @return true if the game is over
-     */
-    public boolean gameOver() {
-        return noTilesLeft();
-    }
-
-
     public boolean isValidWordSpaceHorizontal(int row, int col, String word) {
         char[] letters = word.toCharArray();
         boolean overlaps = false;
@@ -253,6 +266,16 @@ public class Board {
         return overlaps;
     }
 
+    /**
+     * Returns true if the board has space for the word placed at row, col
+     * @requires row, col to be a valid field
+     * @requires word is not null
+     * @ensures true when the board has space for the word placed at row, col
+     * @param row the row of the field
+     * @param col the column of the field
+     * @param word the word to be played
+     * @return true if the board has space for the word placed at row, col
+     */
     public boolean isValidWordSpaceVertical(int row, int col, String word) {
         char[] letters = word.toCharArray();
         boolean overlaps = false;
@@ -289,6 +312,10 @@ public class Board {
         return overlaps;
     }
 
+    /**
+     * Returns a list of the words placed on the board
+     * @return a list of the words placed on the board
+     */
     public List<String> getWordsOnBoard(){
         List<String> words = new ArrayList<>();
         //get horizontal words
@@ -309,7 +336,7 @@ public class Board {
                 }
             }
         }
-        //get vertical
+        //get vertical words
         for(int col = 0; col < DIM; col++){
             String wordV = "";
             for(int row = 0; row < DIM; row++){
@@ -330,6 +357,16 @@ public class Board {
         return words;
     }
 
+    /**
+     * Returns a String of the letters that have to be played when playing word
+     * @requires row, col to be a valid field
+     * @requires word is not null
+     * @ensures a String is not null and size > 1
+     * @param row the row of the field
+     * @param col the column of the field
+     * @param word the word to be played
+     * @return a String of the letters that have to be played
+     */
     public String getLettersToPlayHorizontal(int row, int col, String word){
         char[] wordArray = word.toCharArray();
         int i = 0;
@@ -344,6 +381,16 @@ public class Board {
         return lettersToPlay;
     }
 
+    /**
+     * Returns a String of the letters that have to be played when playing word
+     * @requires row, col to be a valid field
+     * @requires word is not null
+     * @ensures a String is not null and size > 1
+     * @param row the row of the field
+     * @param col the column of the field
+     * @param word the word to be played
+     * @return a String of the letters that have to be played
+     */
     public String getLettersToPlayVertical(int row, int col, String word){
         char[] wordArray = word.toCharArray();
         int i = 0;
@@ -357,6 +404,11 @@ public class Board {
         return lettersToPlay;
     }
 
+    /**
+     * Returns true if the board is empty
+     * @ensures if true, the board has no tiles
+     * @return true if the board is empty
+     */
     public boolean isBoardEmpty(){
         for(Cell[] cs : this.cells){
             for(Cell c : cs){
@@ -368,78 +420,17 @@ public class Board {
         return true;
     }
 
-//    public List<String> getAdjacentWordsHorizontal(int row, int col, String word){
-//        char[] wordArray = word.toCharArray();
-//        List<String> adjacentWords = new ArrayList<>();
-//        for(int i = 0; i < (wordArray.length); i++){
-//            List<Character> wordUp = new ArrayList<>();
-//            List<Character> wordDown = new ArrayList<>();
-//            if(cells[row-1][col+i].getLetter() != ' '){
-//                int upIdx = 0;
-//                while(cells[row-1-upIdx][col+i].getLetter() != ' ') {
-//                    wordUp.add(0, cells[row - upIdx][col+1+i].getLetter());
-//                    upIdx++;
-//                }
-//            }
-//            if(cells[row+1][col+i].getLetter() != ' '){
-//                int downIdx = 0;
-//                while(cells[row+1+downIdx][col+i].getLetter() != ' ') {
-//                    wordDown.add((wordDown.size()), cells[row+1+downIdx][col+i].getLetter());
-//                    downIdx++;
-//                }
-//            }
-//            String up= "";
-//            String down = "";
-//            for(Character c : wordUp){
-//                up+=c;
-//            }
-//            for(Character c : wordDown){
-//                down+=c;
-//            }
-//            adjacentWords.add(up);
-//            adjacentWords.add(down);
-//            adjacentWords.add(up + wordArray[i] + down);
-//        }
-//        return adjacentWords;
-//    }
-
-
-//    public List<String> getAdjacentWordsVertical(int row, int col, String word){
-//        char[] wordArray = word.toCharArray();
-//
-//        List<String> adjacentWords = new ArrayList<>();
-//        for(int i = 0; i < wordArray.length; i++){
-//            List<Character> wordLeft = new ArrayList<>();
-//            List<Character> wordRight = new ArrayList<>();
-//            if(cells[row+i][col-1].getLetter() != ' '){
-//                int leftIdx = 0;
-//                while(cells[row+i][col-1-leftIdx].getLetter() != ' ') {
-//                    wordLeft.add(0, cells[row+i][col-1-leftIdx].getLetter());
-//                    leftIdx++;
-//                }
-//            }
-//            if(cells[row+i][col+1].getLetter() != ' '){
-//                int rightIdx = 0;
-//                while(cells[row+i][col+1+rightIdx].getLetter() != ' ') {
-//                    wordRight.add((wordRight.size()), cells[row+i][col+1+rightIdx].getLetter());
-//                    rightIdx++;
-//                }
-//            }
-//            String left= "";
-//            String right = "";
-//            for(Character c : wordLeft){
-//                left+=c;
-//            }
-//            for(Character c : wordRight){
-//                right+=c;
-//            }
-//            adjacentWords.add(left);
-//            adjacentWords.add(right);
-//            adjacentWords.add(left + wordArray[i] + right);
-//        }
-//        return adjacentWords;
-//    }
-
+    /**
+     * Places the given word on the board
+     * @requires row, col to be a valid field
+     * @requires word is not null
+     * @requires the board to have a valid space for the word at row, col
+     * @ensures a String is not null and size > 1
+     * @param row the row of the field
+     * @param col the column of the field
+     * @param word the word to be played
+     * @return the String of the letters that overlap with the tiles already on the board
+     */
     public String setWordHorizontal(int row, int col, String word){
         String toRemove = getLettersToPlayHorizontal(row, col ,word);
         char[] wordArray = word.toCharArray();
@@ -452,6 +443,17 @@ public class Board {
         return toRemove;
     }
 
+    /**
+     * Places the given word on the board
+     * @requires row, col to be a valid field
+     * @requires word is not null
+     * @requires the board to have a valid space for the word at row, col
+     * @ensures a String is not null and size > 1
+     * @param row the row of the field
+     * @param col the column of the field
+     * @param word the word to be played
+     * @return the String of the letters that overlap with the tiles already on the board
+     */
     public String setWordVertical(int row, int col, String word){
         String toRemove = getLettersToPlayVertical(row, col ,word);
         char[] wordArray = word.toCharArray();
@@ -465,28 +467,6 @@ public class Board {
         }
 
         return toRemove;
-    }
-
-
-    /**
-     * Checks if the mark m has won. A mark wins if it controls at
-     * least one row, column or diagonal.
-     * @requires m to be either XX or OO
-     * @ensures true when m has a row, column or diagonal
-     * @return true if the mark has won
-     */
-    public boolean isWinner() {
-        return false;
-    }
-
-    /**
-     * Returns true if the game has a winner. This is the case when one of the
-     * marks controls at least one row, column or diagonal.
-     * @ensures true when either XX or OO has won
-     * @return true if the student has a winner.
-     */
-    public boolean hasWinner() {
-        return false;
     }
 
     /**
@@ -514,9 +494,8 @@ public class Board {
     }
 
     /**
-     * Empties all fields of this board (i.e., let them refer to the value
-     * Mark.EMPTY).
-     * @ensures all fields are EMPTY
+     * Empties all fields of this board (i.e. Cell letter is ' ')
+     * @ensures all fields are empty
      */
     public void reset() {
         for(int row = 0; row < DIM; row++){
@@ -527,9 +506,12 @@ public class Board {
     }
 
     /**
-     * Sets the content of field i to the mark m.
-     * @requires i to be a valid field
-     * @ensures field i to be set to Mark m
+     * Sets the content of field row, col to the letter c
+     * @requires row, col to be a valid field
+     * @param row the row of the field
+     * @param col the column of the field
+     * @param c the letter that the field will be set to
+     * @ensures field row, col to be set to Mark m
      */
     public void setField(int row, int col, char c) {
         this.cells[row][col].setLetter(c);
