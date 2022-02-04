@@ -138,4 +138,8 @@ public class ClientHandler implements Runnable{
     public void informMove(String name, String move) {
         sendToClient(Protocol.infomMove(name, move));
     }
+
+    public void newTiles(String tiles) {
+        sendToClient(Protocol.newTiles(tiles));
+    }
 }

@@ -38,7 +38,7 @@ public class Client implements Runnable{
     private void handleServerMessage(String message) {
         String command = Protocol.parseCommand(message);
         String[] all = Protocol.parseAll(message);
-//        System.out.println(message);
+        System.out.println(message);
 
         switch (command) {
             case "WELCOME":

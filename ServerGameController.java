@@ -97,6 +97,7 @@ public class ServerGameController implements Runnable {
         String semiCommand = m.split(Protocol.UNIT_SEPARATOR+"")[0];
         if (semiCommand.equals("SWAP")) {
             boolean correct = this.game.swap(name, Protocol.getRest(m));
+//            
             return null;
         }
         if (semiCommand.equals("SKIP")) {
@@ -107,11 +108,14 @@ public class ServerGameController implements Runnable {
         if (e.equals(Protocol.Error.NoError)) {
             played = true;
             informMove(name, m);
+            for(ClientHandler c: clientHandlers) {
+                if (c.getName().equals(name)) {
+                    c.newTiles(this.game.getPlayerByName(name).newLetters);
+                }
+            }
         } else {
 //            TODO: handle errors here
         }
-
-
         return e;
 
     }

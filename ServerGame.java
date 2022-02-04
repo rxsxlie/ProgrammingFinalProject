@@ -155,11 +155,11 @@ public class ServerGame {
 
         String playLetters = "";
         if (orientation.equals("H")) {
-            this.board.setWordHorizontal(row, col, wordToPlay);
             playLetters = this.board.getLettersToPlayHorizontal(row, col, wordToPlay);
+            this.board.setWordHorizontal(row, col, wordToPlay);
         } else {
-            this.board.setWordVertical(row, col, wordToPlay);
             playLetters = this.board.getLettersToPlayVertical(row, col, wordToPlay);
+            this.board.setWordVertical(row, col, wordToPlay);
         }
         List<String> newWords = getNewWords(wordsOnBoard, this.board.getWordsOnBoard());
         newWords.remove(wordToPlay);

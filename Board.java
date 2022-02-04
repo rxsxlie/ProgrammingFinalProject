@@ -340,7 +340,7 @@ public class Board {
             }
             i++;
         }
-        System.out.println(lettersToPlay);
+
         return lettersToPlay;
     }
 
