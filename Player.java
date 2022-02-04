@@ -7,6 +7,7 @@ public class Player {
     String name;
     Rack rack;
     int score;
+    public String newLetters = "";
 
     public Player(String name){
         this.name = name;

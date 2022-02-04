@@ -92,7 +92,6 @@ public class GameServer implements Runnable{
     }
     private synchronized void  startGame(ArrayList<ClientHandler> queue) {
         System.out.println("We actually would want to start a game");
-//        TODO: actually start a game
 
         for (ClientHandler clientHandler: clientHandlers){
             clientHandler.setExpectingGame(false);
@@ -102,7 +101,7 @@ public class GameServer implements Runnable{
         gameThread.start();
     }
 
-    public boolean makeMove(String name,String m) {
+    public Protocol.Error makeMove(String name,String m) {
 
         return this.gameController.makeMove(name, m);
     }

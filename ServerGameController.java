@@ -6,7 +6,7 @@ public class ServerGameController implements Runnable {
 
 //    This will own one game and operate it.
 
-    private Game game;
+    private ServerGame game;
     private ArrayList<ClientHandler> clientHandlers;
     public final Object playedLock = new Object();
     public boolean played = false;
@@ -15,8 +15,6 @@ public class ServerGameController implements Runnable {
         this.clientHandlers = cs;
 
     }
-
-
 
     private void gameLoop() {
         startGame();
@@ -29,7 +27,7 @@ public class ServerGameController implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.exit(0);
+            System.out.println(this.game.board.toString());
         }
     }
 
@@ -57,8 +55,9 @@ public class ServerGameController implements Runnable {
         }
     }
 
-    private void playTurn(ClientHandler player) {
+    private synchronized void playTurn(ClientHandler player) {
         notifyTurns(player.getName());
+        this.played = false;
         waitOnPlayer();
 
 //        Let the player know it is his turn
@@ -72,7 +71,7 @@ public class ServerGameController implements Runnable {
 
     private void startGame() {
 
-        this.game = new Game(clientHandlers);
+        this.game = new ServerGame(clientHandlers);
         this.game.start();
         ArrayList<String> names = new ArrayList<>();
         for (ClientHandler c: clientHandlers) {
@@ -93,23 +92,27 @@ public class ServerGameController implements Runnable {
         gameLoop();
     }
 
-    public boolean makeMove(String name, String m) {
+    public Protocol.Error makeMove(String name, String m) {
 
         String semiCommand = m.split(Protocol.UNIT_SEPARATOR+"")[0];
         if (semiCommand.equals("SWAP")) {
             boolean correct = this.game.swap(name, Protocol.getRest(m));
-            return correct;
+            return null;
         }
         if (semiCommand.equals("SKIP")) {
             this.game.skip(name);
         }
-        if (this.game.validMove(m)) {
-            this.game.makeMove(name, m);
+
+        Protocol.Error e = this.game.makeMove(name, m);
+        if (e.equals(Protocol.Error.NoError)) {
             played = true;
             informMove(name, m);
+        } else {
+//            TODO: handle errors here
         }
 
-        return this.game.validMove(m);
+
+        return e;
 
     }
 

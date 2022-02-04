@@ -49,13 +49,11 @@ public class Util {
         List<Tile> wordTiles = getWordTiles(word);
         for(int i = col; i < (col+word.length()); i++){
             Tile t = wordTiles.get(letterIdx);
-            System.out.println(t.getLetter() + "; " + t.getValue());
             if(this.board.getCells()[row][i].getCellValue() == Cell.CellValue.DOUBLE_LETTER){
                 count += (t.getValue()*2);
             } else if (this.board.getCells()[row][i].getCellValue() == Cell.CellValue.TRIPLE_LETTER){
                 count += (t.getValue()*3);
             } else if (this.board.getCells()[row][i].getCellValue() == Cell.CellValue.DOUBLE_WORD){
-                System.out.println("Double word");
                 dwCount++;
                 count += t.getValue();
             } else if (this.board.getCells()[row][i].getCellValue() == Cell.CellValue.TRIPLE_WORD) {
@@ -65,7 +63,6 @@ public class Util {
                 count += t.getValue();
             }
             letterIdx ++;
-            System.out.println("Intermediate count: " + count);
         }
         return (int) (count * Math.pow(2, dwCount) * Math.pow(3, twCount));
     }

@@ -100,7 +100,7 @@ public class ClientHandler implements Runnable{
 
             case "MAKEMOVE":
                 String move = Protocol.getRest(m);
-                boolean valid = this.server.makeMove(this.getName(), move);
+                Protocol.Error e = this.server.makeMove(this.getName(), move);
 //                TODO; handle invalid move
                 break;
 

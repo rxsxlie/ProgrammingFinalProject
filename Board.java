@@ -77,7 +77,6 @@ public class Board {
      */
     public Board deepCopy() {
         Board copy = new Board();
-
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[0].length; j++) {
                 char letter = this.cells[i][j].getLetter();
@@ -223,14 +222,11 @@ public class Board {
         boolean overlaps = false;
         int lettersI = 0;
         if(isBoardEmpty()){
-            System.out.println("Empty board");
             for(int i = col; i < (col+word.length()); i++){
                 if(!isField(row, i)){
-                    System.out.println("Space is out of scope of the board");
                     return false;
                 }
                 if(row == 7 && i == 7){
-                    System.out.println("Overlapping H8!");
                     overlaps = true;
                 }
                 lettersI++;
@@ -262,15 +258,12 @@ public class Board {
         boolean overlaps = false;
         int lettersI = 0;
         if(isBoardEmpty()){
-            System.out.println("Empty board");
             for(int i = col; i < (col+word.length()); i++){
                 if(!isField(row, i)){
-                    System.out.println("Space is out of scope of the board");
                     return false;
                 }
                 if(row == 7 && i == 7){
                     overlaps = true;
-                    System.out.println("Overlapping H8!");
                 }
                 lettersI++;
             }
@@ -334,9 +327,6 @@ public class Board {
                 }
             }
         }
-        while(words.remove("")) {}
-
-        System.out.println(words);
         return words;
     }
 
@@ -379,77 +369,77 @@ public class Board {
         return true;
     }
 
-    public List<String> getAdjacentWordsHorizontal(int row, int col, String word){
-        char[] wordArray = word.toCharArray();
-        List<String> adjacentWords = new ArrayList<>();
-        for(int i = 0; i < (wordArray.length); i++){
-            List<Character> wordUp = new ArrayList<>();
-            List<Character> wordDown = new ArrayList<>();
-            if(cells[row-1][col+i].getLetter() != ' '){
-                int upIdx = 0;
-                while(cells[row-1-upIdx][col+i].getLetter() != ' ') {
-                    wordUp.add(0, cells[row - upIdx][col+1+i].getLetter());
-                    upIdx++;
-                }
-            }
-            if(cells[row+1][col+i].getLetter() != ' '){
-                int downIdx = 0;
-                while(cells[row+1+downIdx][col+i].getLetter() != ' ') {
-                    wordDown.add((wordDown.size()), cells[row+1+downIdx][col+i].getLetter());
-                    downIdx++;
-                }
-            }
-            String up= "";
-            String down = "";
-            for(Character c : wordUp){
-                up+=c;
-            }
-            for(Character c : wordDown){
-                down+=c;
-            }
-            adjacentWords.add(up);
-            adjacentWords.add(down);
-            adjacentWords.add(up + wordArray[i] + down);
-        }
-        return adjacentWords;
-    }
+//    public List<String> getAdjacentWordsHorizontal(int row, int col, String word){
+//        char[] wordArray = word.toCharArray();
+//        List<String> adjacentWords = new ArrayList<>();
+//        for(int i = 0; i < (wordArray.length); i++){
+//            List<Character> wordUp = new ArrayList<>();
+//            List<Character> wordDown = new ArrayList<>();
+//            if(cells[row-1][col+i].getLetter() != ' '){
+//                int upIdx = 0;
+//                while(cells[row-1-upIdx][col+i].getLetter() != ' ') {
+//                    wordUp.add(0, cells[row - upIdx][col+1+i].getLetter());
+//                    upIdx++;
+//                }
+//            }
+//            if(cells[row+1][col+i].getLetter() != ' '){
+//                int downIdx = 0;
+//                while(cells[row+1+downIdx][col+i].getLetter() != ' ') {
+//                    wordDown.add((wordDown.size()), cells[row+1+downIdx][col+i].getLetter());
+//                    downIdx++;
+//                }
+//            }
+//            String up= "";
+//            String down = "";
+//            for(Character c : wordUp){
+//                up+=c;
+//            }
+//            for(Character c : wordDown){
+//                down+=c;
+//            }
+//            adjacentWords.add(up);
+//            adjacentWords.add(down);
+//            adjacentWords.add(up + wordArray[i] + down);
+//        }
+//        return adjacentWords;
+//    }
 
 
-    public List<String> getAdjacentWordsVertical(int row, int col, String word){
-        char[] wordArray = word.toCharArray();
-
-        List<String> adjacentWords = new ArrayList<>();
-        for(int i = 0; i < wordArray.length; i++){
-            List<Character> wordLeft = new ArrayList<>();
-            List<Character> wordRight = new ArrayList<>();
-            if(cells[row+i][col-1].getLetter() != ' '){
-                int leftIdx = 0;
-                while(cells[row+i][col-1-leftIdx].getLetter() != ' ') {
-                    wordLeft.add(0, cells[row+i][col-1-leftIdx].getLetter());
-                    leftIdx++;
-                }
-            }
-            if(cells[row+i][col+1].getLetter() != ' '){
-                int rightIdx = 0;
-                while(cells[row+i][col+1+rightIdx].getLetter() != ' ') {
-                    wordRight.add((wordRight.size()), cells[row+i][col+1+rightIdx].getLetter());
-                    rightIdx++;
-                }
-            }
-            String left= "";
-            String right = "";
-            for(Character c : wordLeft){
-                left+=c;
-            }
-            for(Character c : wordRight){
-                right+=c;
-            }
-            adjacentWords.add(left);
-            adjacentWords.add(right);
-            adjacentWords.add(left + wordArray[i] + right);
-        }
-        return adjacentWords;
-    }
+//    public List<String> getAdjacentWordsVertical(int row, int col, String word){
+//        char[] wordArray = word.toCharArray();
+//
+//        List<String> adjacentWords = new ArrayList<>();
+//        for(int i = 0; i < wordArray.length; i++){
+//            List<Character> wordLeft = new ArrayList<>();
+//            List<Character> wordRight = new ArrayList<>();
+//            if(cells[row+i][col-1].getLetter() != ' '){
+//                int leftIdx = 0;
+//                while(cells[row+i][col-1-leftIdx].getLetter() != ' ') {
+//                    wordLeft.add(0, cells[row+i][col-1-leftIdx].getLetter());
+//                    leftIdx++;
+//                }
+//            }
+//            if(cells[row+i][col+1].getLetter() != ' '){
+//                int rightIdx = 0;
+//                while(cells[row+i][col+1+rightIdx].getLetter() != ' ') {
+//                    wordRight.add((wordRight.size()), cells[row+i][col+1+rightIdx].getLetter());
+//                    rightIdx++;
+//                }
+//            }
+//            String left= "";
+//            String right = "";
+//            for(Character c : wordLeft){
+//                left+=c;
+//            }
+//            for(Character c : wordRight){
+//                right+=c;
+//            }
+//            adjacentWords.add(left);
+//            adjacentWords.add(right);
+//            adjacentWords.add(left + wordArray[i] + right);
+//        }
+//        return adjacentWords;
+//    }
 
     public void setWordHorizontal(int row, int col, String word){
         char[] wordArray = word.toCharArray();

@@ -70,6 +70,7 @@ public class ServerGame {
         for (Tile boi : newTiles) {
             res.append(boi.getLetter());
         }
+        p.newLetters = res.toString();
         return res.toString();
     }
 
@@ -166,26 +167,22 @@ public class ServerGame {
         player.addPoints(util.getWordValueOnBoardHorizontal(row, col, wordToPlay) + extra);
         player.getRack().removeTiles(util.getWordTiles(playLetters));
         giveNewTilesToPlayer(playLetters.length(), player);
-//        TODO: notify the player of new tiles
 
         return Protocol.Error.NoError;
     }
 
-
-
-
-
-
-
-
     public boolean isOver() {
-//        TODO: actually check
         return this.over;
     }
 
-    public void makeMove(String name, String m) {
-//        TODO: make move
-        System.out.println("I am the game and a move has been played by " + name);
+    public Protocol.Error makeMove(String name, String m) {
+        Protocol.Error e = playMove(name, m);
+
+
+
+//        TODO: check if the game should be over
+
+        return e;
     }
 
     public Protocol.Error validMove(String pos, String orientation, String word, String playerName) {

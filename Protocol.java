@@ -49,7 +49,7 @@ public class Protocol {
     }
 
     public static String newTiles(String letters) {
-        return "NEWLETTER " + letters;
+        return "NEWTILES " + letters;
     }
 
     public static String infomMove(String name, String move) {

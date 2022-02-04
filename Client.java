@@ -66,8 +66,7 @@ public class Client implements Runnable{
                 break;
 
             case "INFORMMOVE":
-                System.out.println("Move was made by " + all[1]);
-
+                System.out.println("Move was made by " + all[1] + "played "+ all[5]);
 
 
         };
@@ -77,7 +76,9 @@ public class Client implements Runnable{
     private void handleTurn() {
         if (this.ourTurn) {
             System.out.println("Should make a move");
-            sendMessageToServer(Protocol.makeMoveSwap("abc"));
+            String move = getUserInput("Please enter a move");
+            String[] s = move.split(" ");
+            sendMessageToServer(Protocol.makeMoveWord(s[0], s[1], s[2]));
         }
 
 
