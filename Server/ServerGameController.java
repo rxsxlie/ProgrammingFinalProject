@@ -31,6 +31,11 @@ public class ServerGameController implements Runnable {
                 e.printStackTrace();
             }
         }
+//        Game is over
+        String message = end("WIN");
+        for (ClientHandler c: clientHandlers) {
+            c.sendToClient(message);
+        }
     }
 
 
@@ -96,6 +101,10 @@ public class ServerGameController implements Runnable {
 
     public Protocol.Error makeMove(String name, String m) {
 
+        for (Player player : this.game.players) {
+            System.out.println(player.getRack().toString());
+        }
+
         String semiCommand = m.split(Protocol.UNIT_SEPARATOR+"")[0];
         if (semiCommand.equals("SWAP")) {
             String letters = Protocol.parseAll(m)[1];
@@ -117,12 +126,20 @@ public class ServerGameController implements Runnable {
         }
 
         Protocol.Error e = this.game.makeMove(name, m);
+        char[] cs = this.game.getPlayerByName(name).toRemove.toCharArray();
+        ArrayList<Tile> ts = new ArrayList<>();
+        for (char c : cs) {
+            ts.add(new Tile(c, 1));
+        }
+        this.game.getPlayerByName(name).getRack().removeTiles(ts);
+        this.game.getPlayerByName(name).toRemove = "";
         if (e.equals(Protocol.Error.NoError)) {
             played = true;
             informMove(name, m);
             for(ClientHandler c: clientHandlers) {
                 if (c.getName().equals(name)) {
                     c.newTiles(this.game.getPlayerByName(name).newLetters);
+                    this.game.getPlayerByName(name).newLetters = "";
                 }
             }
         } else {
@@ -136,5 +153,10 @@ public class ServerGameController implements Runnable {
         for (ClientHandler c: clientHandlers) {
             c.informMove(name, move);
         }
+    }
+
+    public String end(String cause) {
+        return Protocol.gameOver(this.game.players.get(0).getName(), this.game.players.get(1).getName(),
+                this.game.players.get(0).getScore()+"", this.game.players.get(1).getScore()+"", cause);
     }
 }

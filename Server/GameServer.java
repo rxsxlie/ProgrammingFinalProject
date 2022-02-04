@@ -65,8 +65,12 @@ public class GameServer implements Runnable{
         synchronized (clientHandlers) {
             clientHandlers.remove(clientHandler);
         }
-            System.out.println("Removed a client");
-//            TODO: announce to the rest
+        System.out.println("Removed a client");
+        String message = this.gameController.end("DISCONNECT");
+        for (ClientHandler c: clientHandlers) {
+            c.sendToClient(message);
+        }
+        clientHandlers = new ArrayList<>();
 
     }
 //  There is at least one client waiting

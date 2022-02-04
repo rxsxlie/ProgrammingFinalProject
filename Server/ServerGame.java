@@ -176,7 +176,24 @@ public class ServerGame {
     }
 
     public boolean isOver() {
-        return this.over;
+//        Count the amount of tiles on the board + the racks and if a player has empty rack the game is over.
+        int tileCount = 0;
+        boolean isEmpty = false;
+        for(int i = 0; i < this.board.getCells().length; i++){
+            for(int j = 0; j < this.board.getCells()[0].length; j++){
+                if(this.board.getCells()[i][j].getLetter() != ' '){
+                    tileCount++;
+                }
+            }
+        }
+        for(Player p : players){
+            tileCount += p.getRack().getLettersOnRack();
+            if(p.getRack().getLettersOnRack() < 1){
+                isEmpty = true;
+            }
+        }
+        return ((tileCount > 99) && isEmpty);
+
     }
 
     public Protocol.Error makeMove(String name, String m) {

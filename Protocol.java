@@ -60,8 +60,8 @@ public class Protocol {
         return "INFORMMOVE " + name + " " + move + MESSAGE_SEPARATOR;
     }
 
-    public static String gameOver(String[] names, int[] scores, String cause) {
-        return "INFORMMOVE " + cause + " " + names[0] + " " + scores[0] + " " + names[1] + " " + scores[1];
+    public static String gameOver(String n1, String n2, String s1, String s2, String cause) {
+        return "INFORMMOVE" + UNIT_SEPARATOR + cause + UNIT_SEPARATOR + n1 + UNIT_SEPARATOR + s1 + UNIT_SEPARATOR + n2 + UNIT_SEPARATOR + s2;
     }
 
 

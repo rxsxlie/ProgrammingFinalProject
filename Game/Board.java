@@ -354,7 +354,6 @@ public class Board {
             }
             i++;
         }
-        System.out.println(lettersToPlay);
         return lettersToPlay;
     }
 
@@ -441,28 +440,31 @@ public class Board {
 //        return adjacentWords;
 //    }
 
-    public void setWordHorizontal(int row, int col, String word){
+    public String setWordHorizontal(int row, int col, String word){
+        String toRemove = getLettersToPlayHorizontal(row, col ,word);
         char[] wordArray = word.toCharArray();
         int i = 0;
         for (char letter : wordArray) {
             setField(row, (col + i), letter);
             i++;
         }
+
+        return toRemove;
     }
 
-    public void setWordVertical(int row, int col, String word){
+    public String setWordVertical(int row, int col, String word){
+        String toRemove = getLettersToPlayVertical(row, col ,word);
         char[] wordArray = word.toCharArray();
         int i = 0;
-        if(this.isValidWordSpaceVertical(row, col, word)) {
-            for (char letter : wordArray) {
-                if(getField((row+i), col).getLetter() == ' ') {
-                    setField((row + i), col, letter);
-                }
-                i++;
+
+        for (char letter : wordArray) {
+            if(getField((row+i), col).getLetter() == ' ') {
+                setField((row + i), col, letter);
             }
-        } else {
-            System.out.println("There is no space for this word on the board");
+            i++;
         }
+
+        return toRemove;
     }
 
 

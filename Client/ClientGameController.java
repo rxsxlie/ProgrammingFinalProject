@@ -32,7 +32,8 @@ public class ClientGameController {
     }
 
     public void makeMove(String move) {
-        this.game.setMove(move);
+        String toRemove = this.game.setMove(move);
+        remove(toRemove);
     }
 
     public String printBoard() {
@@ -43,7 +44,7 @@ public class ClientGameController {
         return this.game.getPlayerByName(name).getRack().toString();
     }
 
-    public void swap(String s) {
+    public void remove(String s) {
         char[] ss = s.toCharArray();
         ArrayList<Tile> tiles = new ArrayList<Tile>();
         for (char sss: ss) {

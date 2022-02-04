@@ -70,27 +70,37 @@ public class Client implements Runnable{
                 break;
 
             case "INFORMMOVE":
+                if (all[1].equals("DISCONNECT")) {
+                    System.out.println("The other player disconnected, the client will now shut down");
+                    System.out.println("The scores are  " + all[2]+": " + all[3]+"  " + all[4]+": " + all[5]);
+                    System.exit(0);
+                    break;
+                }
+                if (all[1].equals("WIN")) {
+                    System.out.println("The game has a winner!");
+                    System.out.println("The scores are  " + all[2]+": " + all[3]+"  " + all[4]+": " + all[5]);
+                    System.exit(0);
+                    break;
+
+                }
                 if (all[2].equals("SWAP")) {
-                    this.gameController.swap(all[3]);
+                    this.gameController.remove(all[3]);
                     System.out.println("Swapped " + all[2]);
                 } else if (all[2].equals("SKIP")) {
-                    System.out.println("Did a skip " + message);
+                    System.out.println(all[1] + " skipped playing!");
                 } else {
-                    System.out.println("Move was made by " + all[1] + "played "+ all[5]);
+                    System.out.println("Move was made by " + all[1] + " who played: "+ all[5]);
                     this.gameController.makeMove(all[3] +" "+ all[4] +" "+ all[5]);
+                    System.out.println(this.gameController.printBoard());
+                    System.out.println(this.gameController.printRack());
                 }
-
-
         };
 
     }
 
-
     private void handleTurn() {
         if (this.ourTurn) {
-            System.out.println(this.gameController.printBoard());
-            System.out.println(this.gameController.printRack());
-            String move = getUserInput("Please enter a move");
+            String move = getUserInput("Please enter a move, options: [to play example -> H8 H AWORD, to skip -> SKIP, to swap -> SWAP {letters to swap}]");
             String[] s = move.split(" ");
             if (s[0].equals("SWAP")) {
                 sendMessageToServer(Protocol.makeMoveSwap(s[1]));

@@ -7,6 +7,7 @@ public class Player {
     Rack rack;
     int score;
     public String newLetters = "";
+    public String toRemove = "";
 
     public Player(String name){
         this.name = name;

@@ -29,13 +29,12 @@ public class ClientHandler implements Runnable{
         }
     }
 
-    private void sendToClient(String m) {
+    public void sendToClient(String m) {
         try {
             writer.write(m);
             writer.newLine();
             writer.flush();
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -84,7 +83,7 @@ public class ClientHandler implements Runnable{
 
     private void handleMessage(String m) {
         String command = Protocol.parseCommand(m);
-        this.server.print(m);
+//        this.server.print(m);
 
         switch (command) {
             case "ANNOUNCE":
@@ -145,4 +144,6 @@ public class ClientHandler implements Runnable{
     public void newTiles(String tiles) {
         sendToClient(Protocol.newTiles(tiles));
     }
+
+
 }

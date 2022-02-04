@@ -122,7 +122,7 @@ public class ClientGame {
         return false;
     }
 
-    public void setMove(String move) {
+    public String setMove(String move) {
         String[] commands = Protocol.parseAll(move);
         String pos = commands[0];
         String orientation = commands[1];
@@ -130,11 +130,17 @@ public class ClientGame {
         int row = getRowCol(pos)[0];
         int col = getRowCol(pos)[1];
 
+        String toRemove = "";
+
         if (orientation.equals("H")) {
-            this.board.setWordHorizontal(row, col, wordToPlay);
+            toRemove = this.board.setWordHorizontal(row, col, wordToPlay);
         } else if (orientation.equals("V")) {
-            this.board.setWordVertical(row, col, wordToPlay);
+            toRemove = this.board.setWordVertical(row, col, wordToPlay);
         }
+
+        return toRemove;
+
+
     }
 
     public Protocol.Error validMove(String playerName, String move) {
