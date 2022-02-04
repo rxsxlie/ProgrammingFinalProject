@@ -1,6 +1,7 @@
 package ss.Scrabble;
 import java.io.*;
 import java.net.Socket;
+import java.sql.SQLOutput;
 
 public class Client implements Runnable{
 
@@ -9,15 +10,24 @@ public class Client implements Runnable{
     private Socket socket;
     private BufferedReader serverReader;
     private BufferedWriter serverWriter;
+    private boolean ourTurn = false;
 
     @Override
     public void run() {
+        try {
+            this.serverWriter = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
+            this.serverReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while(true) {
             String message = null;
             try {
-                message = userReader.readLine();
+                message = serverReader.readLine();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("The server is dead");
+                System.exit(1);
             }
             if (message != null) {
                 handleServerMessage(message);
@@ -26,7 +36,25 @@ public class Client implements Runnable{
     }
 
     private void handleServerMessage(String message) {
-//        TODO
+        String command = Protocol.parseCommand(message);
+        String[] all = Protocol.parseAll(message);
+        System.out.println(message);
+
+        switch (command) {
+            case "WELCOME":
+                System.out.println("Server welcomed us!");
+                break;
+
+            case "INFORMQUEUE":
+                System.out.println("There are " + all[1] + " players waiting in the server.");
+                break;
+
+            case "STARTGAME":
+                System.out.println("A game is starting with " + all[1] + " and " + all[2]);
+                break;
+
+        };
+
     }
 
     private String getUserInput(String m){
@@ -40,20 +68,27 @@ public class Client implements Runnable{
     }
 
     private void userLoop() {
-        makeObjects();
         sendMessageToServer(Protocol.announce(this.name));
-
-
-    }
-
-    private void makeObjects() {
+//        We should get a game
         try {
-            this.serverWriter = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-            this.serverReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        } catch (IOException e) {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        String wannaPlay = getUserInput("Do you want to play a game? If so, type yes: ");
+        assert wannaPlay != null;
+        if (wannaPlay.equals("yes")) {
+            sendMessageToServer(Protocol.requestGame(2));
+
+        } else {
+            System.out.println("Oke, bye :(");
+            System.exit(0);
+        }
+
+
     }
+
+
 
     public String getName() {
         return name;
@@ -74,7 +109,21 @@ public class Client implements Runnable{
         this.name = name;
     }
 
-//    TODO handle the IO execption
+
+
+    private String getIP() {
+        return getUserInput("Please tell me the IP of the server:");
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    //    TODO handle the IO execption
     public static void main(String[] args) throws IOException {
         Client client = new Client();
         System.out.println("Client started");
@@ -89,18 +138,5 @@ public class Client implements Runnable{
         Thread t = new Thread(client);
         t.start();
         client.userLoop();
-
-    }
-
-    private String getIP() {
-        return getUserInput("Please tell me the IP of the server:");
-    }
-
-    public Socket getSocket() {
-        return socket;
-    }
-
-    public void setSocket(Socket socket) {
-        this.socket = socket;
     }
 }

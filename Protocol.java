@@ -1,10 +1,14 @@
 package ss.Scrabble;
 
+import java.util.ArrayList;
+
 public class Protocol {
 
 //    TODO: add these to the returns
-    private static final char MESSAGE_SEPARATOR = '\u001e';
+//    private static final char MESSAGE_SEPARATOR = '\u001e';
     private static final char UNIT_SEPARATOR = '\u001f';
+    private static final char MESSAGE_SEPARATOR = ' ';
+
 
 
     public static String announce(String name) {
@@ -19,14 +23,14 @@ public class Protocol {
         return "REQUESTGAME " + numPlayers;
     }
 
-    public static String inforQueue(int inQueue, int numPlayers) {
+    public static String informQueue(int inQueue, int numPlayers) {
         return "INFORMQUEUE " + inQueue +  " " +numPlayers;
     }
 
-    public static String startGame(String... names) {
+    public static String startGame(ArrayList<String> names) {
         String nms = "";
         for(String n : names){
-            nms += n;
+            nms += n + MESSAGE_SEPARATOR;
         }
         return "STARTGAME " + nms;
     }
@@ -67,6 +71,10 @@ public class Protocol {
 
     public static String parseCommand(String m) {
         return m.split(" ")[0];
+    }
+
+    public static String[] parseAll(String m) {
+        return m.split(MESSAGE_SEPARATOR+"");
     }
 
 

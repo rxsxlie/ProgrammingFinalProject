@@ -1,9 +1,12 @@
 package ss.Scrabble;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+
+//TODO: go through the list of erros and handle them
 
 public class GameServer implements Runnable{
     private ArrayList<ClientHandler> clientHandlers;
@@ -34,7 +37,6 @@ public class GameServer implements Runnable{
             try {
 //            This blocks
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("Accepted a client");
                 ClientHandler handler = new ClientHandler(clientSocket, this);
                 new Thread(handler).start();
                 clientHandlers.add(handler);
@@ -69,5 +71,44 @@ public class GameServer implements Runnable{
             System.out.println("Removed a client");
 //            TODO: announce to the rest
 
+    }
+//  There is at least one client waiting
+    public synchronized void gameExpected() {
+
+        ArrayList<ClientHandler> queue = new ArrayList<>();
+        for (ClientHandler clientHandler: clientHandlers){
+            if (clientHandler.isExpectingGame()){
+                queue.add(clientHandler);
+            }
+        }
+        if(queue.size() == 2) {
+            this.startGame(queue);
+        }
+
+    }
+    public synchronized int getAmountOfWaitingPlayers() {
+        ArrayList<ClientHandler> queue = new ArrayList<>();
+        for (ClientHandler clientHandler: clientHandlers){
+            if (clientHandler.isExpectingGame()){
+                queue.add(clientHandler);
+            }
+        }
+        return queue.size();
+    }
+    private synchronized void  startGame(ArrayList<ClientHandler> queue) {
+        System.out.println("We actually would want to start a game");
+//        TODO: actually start a game
+
+//        The players are no players waiting for a game
+        ArrayList<Player> players = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
+        for (ClientHandler clientHandler: clientHandlers){
+            names.add(clientHandler.getName());
+        }
+        for (ClientHandler clientHandler: clientHandlers){
+            clientHandler.setExpectingGame(false);
+            players.add(new Player(clientHandler.getName()));
+            clientHandler.letPlayerKnowThereIsAGame(names);
+        }
     }
 }
