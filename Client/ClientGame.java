@@ -57,6 +57,17 @@ public class ClientGame {
         p.setRack(tiles);
     }
 
+    public void removeFromRack(String name, String letters) {
+        Player p = getPlayerByName(name);
+        ArrayList<Tile> tiles = new ArrayList<>();
+        char[] charLetters = letters.toCharArray();
+
+        for (char c : charLetters) {
+            tiles.add(new Tile(c, 1));
+        }
+        p.getRack().removeTiles(tiles);
+    }
+
     public void updateRack(String name, String letters) {
         Player p = getPlayerByName(name);
         ArrayList<Tile> tiles = new ArrayList<>();
@@ -111,20 +122,35 @@ public class ClientGame {
         return false;
     }
 
-    public void setMove(String name, String move) {
+    public void setMove(String move) {
+        String[] commands = Protocol.parseAll(move);
+        String pos = commands[1];
+        String orientation = commands[2];
+        String wordToPlay = commands[3];
+        int row = getRowCol(pos)[0];
+        int col = getRowCol(pos)[1];
 
+        if (orientation.equals("H")) {
+            this.board.setWordHorizontal(row, col, wordToPlay);
+        } else if (orientation.equals("V")) {
+            this.board.setWordVertical(row, col, wordToPlay);
+        }
     }
 
-    public Protocol.Error validMove(String pos, String orientation, String word, String playerName) {
+    public Protocol.Error validMove(String playerName, String move) {
+
+        String[] commands = Protocol.parseAll(move);
+        String pos = commands[1];
+        String orientation = commands[2];
+        String word = commands[3];
+        int row = getRowCol(pos)[0];
+        int col = getRowCol(pos)[1];
 
         Player player = getPlayerByName(playerName);
 
         List<String> oldWords = this.board.getWordsOnBoard();
         List<Tile> copyRack = player.getRack().getCopy();
         Board copyBoard = this.board.deepCopy();
-
-        int row = getRowCol(pos)[0];
-        int col = getRowCol(pos)[1];
 
         if (orientation.equals("H") && copyBoard.isValidWordSpaceHorizontal(row, col, word)) {
             List<Tile> tilesNeededToPlay = util.getWordTiles(copyBoard.getLettersToPlayHorizontal(row, col, word));

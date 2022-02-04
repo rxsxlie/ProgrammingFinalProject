@@ -13,6 +13,7 @@ public class Client implements Runnable{
     private BufferedReader serverReader;
     private BufferedWriter serverWriter;
     private boolean ourTurn = false;
+    private ClientGameController gameController;
 
     @Override
     public void run() {
@@ -52,11 +53,12 @@ public class Client implements Runnable{
                 break;
 
             case "STARTGAME":
-                System.out.println("A game is starting with " + all[1] + " and " + all[2]);
+
+                this.gameController = new ClientGameController(all[1], all[2], name);
                 break;
 
             case "NEWTILES":
-                System.out.println("Got me some new tiles: " + all[1]);
+                this.gameController.tileUpdate(all[1]);
                 break;
 
             case "NOTIFYTURN":
@@ -74,12 +76,14 @@ public class Client implements Runnable{
                     System.out.println("Did a skip " + message);
                 } else {
                     System.out.println("Move was made by " + all[1] + "played "+ all[5]);
+                    this.gameController.makeMove(all[3] +" "+ all[4] +" "+ all[5]);
                 }
 
 
         };
 
     }
+
 
     private void handleTurn() {
         if (this.ourTurn) {
@@ -90,14 +94,13 @@ public class Client implements Runnable{
             } else if (s[0].equals("SKIP")) {
                 sendMessageToServer(Protocol.skip());
             }
-
             else {
+                if (!this.gameController.checkValidMove(move)){
+                    handleTurn();
+                }
                 sendMessageToServer(Protocol.makeMoveWord(s[0], s[1], s[2]));
             }
         }
-
-
-
         this.ourTurn = false;
     }
 
