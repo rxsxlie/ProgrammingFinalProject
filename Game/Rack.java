@@ -9,16 +9,7 @@ public class Rack {
 
     public Rack(){
         lettersOnRack = 7;
-        this.tileSet = getEmptyTileSet();
-    }
-
-    public List<Tile> getEmptyTileSet(){
-        List<Tile> emptyTileSet = new ArrayList<Tile>(this.lettersOnRack);
-        for(int i = 0; i < this.lettersOnRack; i++){
-            Tile temp = new Tile(' ', 0);
-            emptyTileSet.add(temp);
-        }
-        return emptyTileSet;
+        this.tileSet = new ArrayList<Tile>();
     }
 
     public List<Tile> getTileSet(){
@@ -39,6 +30,10 @@ public class Rack {
         for(Tile playedTile : playedTiles) {
             this.tileSet.removeIf(rackTile -> rackTile.getLetter() == playedTile.getLetter());
         }
+    }
+
+    public void clear() {
+        this.tileSet = new ArrayList<>();
     }
 
     public List<Tile> getCopy(){

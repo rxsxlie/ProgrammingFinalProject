@@ -93,7 +93,6 @@ public class GameServer implements Runnable{
         return queue.size();
     }
     private synchronized void  startGame(ArrayList<ClientHandler> queue) {
-        System.out.println("We actually would want to start a game");
 
         for (ClientHandler clientHandler: clientHandlers){
             clientHandler.setExpectingGame(false);

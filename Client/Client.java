@@ -41,7 +41,7 @@ public class Client implements Runnable{
     private void handleServerMessage(String message) {
         String command = Protocol.parseCommand(message);
         String[] all = Protocol.parseAll(message);
-        System.out.println(message);
+//        System.out.println(message);
 
         switch (command) {
             case "WELCOME":
@@ -71,6 +71,7 @@ public class Client implements Runnable{
 
             case "INFORMMOVE":
                 if (all[2].equals("SWAP")) {
+                    this.gameController.swap(all[3]);
                     System.out.println("Swapped " + all[2]);
                 } else if (all[2].equals("SKIP")) {
                     System.out.println("Did a skip " + message);
@@ -87,15 +88,19 @@ public class Client implements Runnable{
 
     private void handleTurn() {
         if (this.ourTurn) {
+            System.out.println(this.gameController.printBoard());
+            System.out.println(this.gameController.printRack());
             String move = getUserInput("Please enter a move");
             String[] s = move.split(" ");
             if (s[0].equals("SWAP")) {
                 sendMessageToServer(Protocol.makeMoveSwap(s[1]));
             } else if (s[0].equals("SKIP")) {
                 sendMessageToServer(Protocol.skip());
+
             }
             else {
-                if (!this.gameController.checkValidMove(move)){
+                if (!this.gameController.checkValidMove(s[0] + " " + s[1] + " " + s[2])){
+                    System.err.println("Wrong move");
                     handleTurn();
                 }
                 sendMessageToServer(Protocol.makeMoveWord(s[0], s[1], s[2]));

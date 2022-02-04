@@ -236,7 +236,6 @@ public class ServerGame {
     public boolean swap(String name, String rest) {
 //        TODO: swap with the give player
 //        TODO: notify the player with the new boys
-        System.out.println("Swap by "+ name);
         return false;
     }
 

@@ -30,10 +30,6 @@ public class ServerGameController implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println(this.game.board.toString());
-            System.out.println(this.game.players.get(0).getRack());
-            System.out.println(this.game.players.get(1).getRack());
-
         }
     }
 
@@ -117,6 +113,7 @@ public class ServerGameController implements Runnable {
         if (semiCommand.equals("SKIP")) {
             informMove(name, m);
             played = true;
+            return Protocol.Error.NoError;
         }
 
         Protocol.Error e = this.game.makeMove(name, m);

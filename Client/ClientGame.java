@@ -124,9 +124,9 @@ public class ClientGame {
 
     public void setMove(String move) {
         String[] commands = Protocol.parseAll(move);
-        String pos = commands[1];
-        String orientation = commands[2];
-        String wordToPlay = commands[3];
+        String pos = commands[0];
+        String orientation = commands[1];
+        String wordToPlay = commands[2];
         int row = getRowCol(pos)[0];
         int col = getRowCol(pos)[1];
 
@@ -140,9 +140,9 @@ public class ClientGame {
     public Protocol.Error validMove(String playerName, String move) {
 
         String[] commands = Protocol.parseAll(move);
-        String pos = commands[1];
-        String orientation = commands[2];
-        String word = commands[3];
+        String pos = commands[0];
+        String orientation = commands[1];
+        String word = commands[2];
         int row = getRowCol(pos)[0];
         int col = getRowCol(pos)[1];
 
@@ -206,4 +206,6 @@ public class ClientGame {
         return res;
 
     }
+
+
 }

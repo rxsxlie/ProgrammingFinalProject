@@ -1,6 +1,8 @@
 package ss.Scrabble.Client;
 
 
+import ss.Scrabble.Game.Player;
+import ss.Scrabble.Game.Tile;
 import ss.Scrabble.Protocol;
 
 import java.util.ArrayList;
@@ -33,17 +35,21 @@ public class ClientGameController {
         this.game.setMove(move);
     }
 
+    public String printBoard() {
+        return this.game.board.toString();
+    }
 
+    public String printRack() {
+        return this.game.getPlayerByName(name).getRack().toString();
+    }
 
-
-
-
-//    TODO
-
-//    Incoming names
-//    Incoming rack changes
-//    Incoming moves
-//    Print board
-//    Print rack
-
+    public void swap(String s) {
+        char[] ss = s.toCharArray();
+        ArrayList<Tile> tiles = new ArrayList<Tile>();
+        for (char sss: ss) {
+            tiles.add(new Tile(sss, 1));
+        }
+        Player p = this.game.getPlayerByName(name);
+        p.getRack().removeTiles(tiles);
+    }
 }

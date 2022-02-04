@@ -84,7 +84,7 @@ public class ClientHandler implements Runnable{
 
     private void handleMessage(String m) {
         String command = Protocol.parseCommand(m);
-//        System.out.println(command);
+        this.server.print(m);
 
         switch (command) {
             case "ANNOUNCE":

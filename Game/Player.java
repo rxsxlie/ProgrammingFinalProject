@@ -23,9 +23,7 @@ public class Player {
     }
 
     public void setRack(List<Tile> newTiles){
-        //remove place holders
-        List<Tile> empty = this.rack.getEmptyTileSet();
-        this.rack.removeTiles(empty);
+        this.rack.clear();
         //append init tiles
         this.rack.putNewTilesOnRack(newTiles);
     }
