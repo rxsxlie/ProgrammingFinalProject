@@ -1,6 +1,8 @@
 package ss.Scrabble;
 
 import java.util.*;
+import ss.Scrabble.Game.*;
+
 
 public class Util {
     LetterBag letterBag;

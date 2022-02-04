@@ -48,6 +48,10 @@ public class Protocol {
         return "MAKEMOVE SWAP " + letters;
     }
 
+    public static String skip() {
+        return "MAKEMOVE" + UNIT_SEPARATOR + "SKIP";
+    }
+
     public static String newTiles(String letters) {
         return "NEWTILES " + letters;
     }
@@ -85,6 +89,8 @@ public class Protocol {
         }
         return res.toString();
     }
+
+
 
 
     public enum Error {
