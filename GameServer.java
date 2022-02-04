@@ -1,7 +1,6 @@
 package ss.Scrabble;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 
 public class GameServer implements Runnable{
     private ArrayList<ClientHandler> clientHandlers;
-    private Game game;
+    private ServerGameController gameController;
     private ServerSocket serverSocket;
     private final int port = 8080;
 
@@ -46,10 +45,6 @@ public class GameServer implements Runnable{
             }
         }
     }
-
-
-
-
 
 
     private void exit() {
@@ -99,16 +94,16 @@ public class GameServer implements Runnable{
         System.out.println("We actually would want to start a game");
 //        TODO: actually start a game
 
-//        The players are no players waiting for a game
-        ArrayList<Player> players = new ArrayList<>();
-        ArrayList<String> names = new ArrayList<>();
-        for (ClientHandler clientHandler: clientHandlers){
-            names.add(clientHandler.getName());
-        }
         for (ClientHandler clientHandler: clientHandlers){
             clientHandler.setExpectingGame(false);
-            players.add(new Player(clientHandler.getName()));
-            clientHandler.letPlayerKnowThereIsAGame(names);
         }
+        this.gameController = new ServerGameController(queue);
+        Thread gameThread = new Thread(this.gameController);
+        gameThread.start();
+    }
+
+    public boolean makeMove(String name,String m) {
+
+        return this.gameController.makeMove(name, m);
     }
 }

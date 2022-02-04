@@ -10,17 +10,23 @@ import java.util.Set;
 public class Dictionary {
     public Set<String> dictionary;
 
-    public Dictionary() throws IOException {
+    public Dictionary() {
 
     }
 
-    public Set<String> getDictionary() throws IOException {
+    public Set<String> getDictionary() {
         Set<String> result = new HashSet<String>();
-        BufferedReader reader = new BufferedReader(new FileReader("src/ss/Scrabble/dictionary.txt"));
-        String word = "";
-        while((word = reader.readLine()) != null){
-            result.add(word);
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("src/ss/Scrabble/dictionary.txt"));
+            String word = "";
+            while((word = reader.readLine()) != null){
+                result.add(word);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
         return result;
     }
 }

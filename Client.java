@@ -1,7 +1,7 @@
 package ss.Scrabble;
 import java.io.*;
 import java.net.Socket;
-import java.sql.SQLOutput;
+
 
 public class Client implements Runnable{
 
@@ -38,7 +38,7 @@ public class Client implements Runnable{
     private void handleServerMessage(String message) {
         String command = Protocol.parseCommand(message);
         String[] all = Protocol.parseAll(message);
-        System.out.println(message);
+//        System.out.println(message);
 
         switch (command) {
             case "WELCOME":
@@ -53,8 +53,36 @@ public class Client implements Runnable{
                 System.out.println("A game is starting with " + all[1] + " and " + all[2]);
                 break;
 
+            case "NEWTILES":
+                System.out.println("Got me some new tiles: " + all[1]);
+                break;
+
+            case "NOTIFYTURN":
+
+                if (this.name.equals(all[2])) {
+                    this.ourTurn = "1".equals(all[1]);
+                    handleTurn();
+                }
+                break;
+
+            case "INFORMMOVE":
+                System.out.println("Move was made by " + all[1]);
+
+
+
         };
 
+    }
+
+    private void handleTurn() {
+        if (this.ourTurn) {
+            System.out.println("Should make a move");
+            sendMessageToServer(Protocol.makeMoveSwap("abc"));
+        }
+
+
+
+        this.ourTurn = false;
     }
 
     private String getUserInput(String m){

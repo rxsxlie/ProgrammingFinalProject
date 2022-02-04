@@ -1,13 +1,14 @@
 package ss.Scrabble;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Protocol {
 
 //    TODO: add these to the returns
 //    private static final char MESSAGE_SEPARATOR = '\u001e';
-    private static final char UNIT_SEPARATOR = '\u001f';
-    private static final char MESSAGE_SEPARATOR = ' ';
+    public static final char UNIT_SEPARATOR = ' ';
+    public static final char MESSAGE_SEPARATOR = ' ';
 
 
 
@@ -27,9 +28,9 @@ public class Protocol {
         return "INFORMQUEUE " + inQueue +  " " +numPlayers;
     }
 
-    public static String startGame(ArrayList<String> names) {
+    public static String startGame(ArrayList<String> cs) {
         String nms = "";
-        for(String n : names){
+        for(String n : cs){
             nms += n + MESSAGE_SEPARATOR;
         }
         return "STARTGAME " + nms;
@@ -51,12 +52,8 @@ public class Protocol {
         return "NEWLETTER " + letters;
     }
 
-    public static String infomMoveWord(String name, String pos, String word) {
-        return "INFORMMOVE " + name + " " + "WORD" + " " + pos + " " + word;
-    }
-
-    public static String infomMoveSwap(String name, String word) {
-        return "INFORMMOVE " + name + " SWAP " + word.length();
+    public static String infomMove(String name, String move) {
+        return "INFORMMOVE " + name + " " + move + MESSAGE_SEPARATOR;
     }
 
     public static String gameOver(String[] names, int[] scores, String cause) {
@@ -75,6 +72,18 @@ public class Protocol {
 
     public static String[] parseAll(String m) {
         return m.split(MESSAGE_SEPARATOR+"");
+    }
+
+    public static String getRest(String m) {
+        String[] ms = m.split(" ");
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < ms.length; i++) {
+            if (i == 0) {
+                continue;
+            }
+            res.append(ms[i]).append(" ");
+        }
+        return res.toString();
     }
 
 

@@ -4,20 +4,27 @@ import jdk.swing.interop.SwingInterOpUtils;
 import ss.utils.TextIO;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Game {
     Board board;
-    Player[] players;
+    ArrayList<Player> players = new ArrayList<>();
+    ArrayList<ClientHandler> playerHandlers;
     LetterBag letterBag;
     Dictionary dict;
     List<String> playedWords;
     Set<String> dictionary;
     Util util;
     Map<Character, Integer> alphToInt = new HashMap<Character, Integer>();
+    private boolean over = false;
 
-    public Game(Player[] players) throws IOException {
-        this.players = players;
+    public Game(ArrayList<ClientHandler> playerHandlers) {
+        this.playerHandlers = playerHandlers;
+        for (ClientHandler clientHandler: this.playerHandlers) {
+            this.players.add(new Player(clientHandler.getName()));
+        }
+
         this.board = new Board();
         this.letterBag = new LetterBag();
         this.dict = new Dictionary();
@@ -25,8 +32,17 @@ public class Game {
         util = new Util(this.letterBag, this.board);
     }
 
+    public Player getPlayerByName(String name) {
+        for (Player player: this.players) {
+            if (player.getName().equals(name)) {
+                return player;
+            }
+        }
+        return null;
+    }
+
     public void play() throws IOException {
-        start();
+//        start();
         while(this.letterBag.numTilesLeft() != 0){
             for(Player player : players){
                 System.out.println(this.board.toString());
@@ -39,7 +55,7 @@ public class Game {
         System.out.println("End game");
     }
 
-    public void start() throws IOException {
+    public void start() {
         this.dictionary = this.dict.getDictionary();
         fillAlphToInt();
         for(Player p : players){
@@ -238,8 +254,28 @@ public class Game {
             this.alphToInt.put(c, i);
             i++;
         }
-        System.out.println(this.alphToInt);
     }
 
 
+    public boolean isOver() {
+//        TODO: actually check
+        return this.over;
+    }
+
+    public void makeMove(String name, String m) {
+//        TODO: make move
+        System.out.println("I am the game and a move has been played by " + name);
+    }
+
+    public boolean validMove(String m) {
+//        TODO: do check valid move
+        return true;
+    }
+
+    public boolean swap(String name, String rest) {
+//        TODO: swap with the give player
+//        TODO: notify the player with the new boys
+        System.out.println("Swap by "+ name);
+        return false;
+    }
 }

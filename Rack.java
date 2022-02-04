@@ -59,4 +59,12 @@ public class Rack {
         }
         return out;
     }
+
+    public String getLetters(){
+        String out = "";
+        for (Tile t : this.tileSet){
+            out += t.getLetter();
+        }
+        return out;
+    }
 }

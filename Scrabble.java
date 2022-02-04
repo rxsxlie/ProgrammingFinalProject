@@ -9,7 +9,7 @@ public class Scrabble {
         for(int i = 0; i < args.length; i++){
             players[i] = new Player(args[i]);
         }
-        Game game = new Game(players);
-        game.play();
+//        Game game = new Game(players);
+//        game.play();
     }
 }

@@ -36,7 +36,6 @@ public class ClientHandler implements Runnable{
         }
     }
 
-
 //    Listen to the client and handle messages as they come in
     @Override
     public void run() {
@@ -61,14 +60,11 @@ public class ClientHandler implements Runnable{
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-
-
             }
             if (message != null) {
                 handleMessage(message);
             }
         }
-
     }
     public String getName(){
         return this.name;
@@ -78,9 +74,14 @@ public class ClientHandler implements Runnable{
         sendToClient(Protocol.error(Protocol.Error.E001));
     }
 
+    public void startGameMessage(ArrayList<String> handlers) {
+
+        sendToClient(Protocol.startGame(handlers));
+    }
+
     private void handleMessage(String m) {
         String command = Protocol.parseCommand(m);
-        System.out.println(command);
+//        System.out.println(command);
 
         switch (command) {
             case "ANNOUNCE":
@@ -95,15 +96,18 @@ public class ClientHandler implements Runnable{
                 this.server.gameExpected();
 
                 sendToClient(Protocol.informQueue(this.server.getAmountOfWaitingPlayers(), 2));
+                break;
 
+            case "MAKEMOVE":
+                String move = Protocol.getRest(m);
+                boolean valid = this.server.makeMove(this.getName(), move);
+//                TODO; handle invalid move
+                break;
 
             case "ERROR":
                 handleError(m);
-
+                break;
         }
-
-
-
     }
 
     private void handleError(String message) {
@@ -117,7 +121,21 @@ public class ClientHandler implements Runnable{
         this.expectingGame = expectingGame;
     }
 
-    public void letPlayerKnowThereIsAGame(ArrayList<String> names) {
-        sendToClient(Protocol.startGame(names));
+    public void newRack(Rack playerRack) {
+        sendToClient(Protocol.newTiles(playerRack.getLetters()));
+    }
+
+    public void notifyTurn(String name, ArrayList<String> names) {
+        ArrayList<String> localNames = names;
+        localNames.remove(name);
+        String otherName = localNames.get(0);
+
+        sendToClient(Protocol.notifyTurn(name, 1));
+        sendToClient(Protocol.notifyTurn(otherName, 0));
+
+    }
+
+    public void informMove(String name, String move) {
+        sendToClient(Protocol.infomMove(name, move));
     }
 }

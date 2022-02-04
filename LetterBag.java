@@ -60,7 +60,6 @@ public class LetterBag {
                 i++;
             }
         }
-        System.out.println("Needed tiles: " + numTiles + ", given tiles: " + randomTiles.size());
         return randomTiles;
     }
 
