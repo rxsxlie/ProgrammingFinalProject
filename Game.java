@@ -278,4 +278,8 @@ public class Game {
         System.out.println("Swap by "+ name);
         return false;
     }
+
+    public void skip(String name) {
+//        TODO: notify all the players about it
+    }
 }

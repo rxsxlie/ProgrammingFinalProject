@@ -102,7 +102,9 @@ public class Protocol {
         E012("Client has already announced themselves"),
         E013("Client has not yet announced themselves"),
         E014("Client is not in a game"),
-        E015("Game already started");
+        E015("Game already started"),
+//        For internal use only
+        NoError("No error");
 
         private final String description;
 

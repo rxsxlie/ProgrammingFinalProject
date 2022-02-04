@@ -94,10 +94,14 @@ public class ServerGameController implements Runnable {
     }
 
     public boolean makeMove(String name, String m) {
-        boolean swap = m.split(Protocol.UNIT_SEPARATOR+"")[0].equals("SWAP");
-        if (swap) {
+
+        String semiCommand = m.split(Protocol.UNIT_SEPARATOR+"")[0];
+        if (semiCommand.equals("SWAP")) {
             boolean correct = this.game.swap(name, Protocol.getRest(m));
             return correct;
+        }
+        if (semiCommand.equals("SKIP")) {
+            this.game.skip(name);
         }
         if (this.game.validMove(m)) {
             this.game.makeMove(name, m);

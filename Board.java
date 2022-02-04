@@ -76,9 +76,15 @@ public class Board {
      * @ensures the values of all fields of the copy match the ones of this Board
      */
     public Board deepCopy() {
-        Board board = new Board();
-        Board boardCopy = board;
-        return boardCopy;
+        Board copy = new Board();
+
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[0].length; j++) {
+                char letter = this.cells[i][j].getLetter();
+                copy.cells[i][j].setLetter(letter);
+            }
+        }
+        return copy;
     }
 
     /**
